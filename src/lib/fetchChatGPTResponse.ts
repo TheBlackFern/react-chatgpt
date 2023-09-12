@@ -1,8 +1,12 @@
-export async function fetchChatGPTResponse(query: string, secret: string) {
+export async function fetchChatGPTResponse(
+  query: string,
+  secret: string,
+  gptType: string
+) {
   console.log(query);
 
   const apiRequestBody = {
-    model: "gpt-3.5-turbo",
+    model: gptType,
     messages: [{ role: "system", content: query }],
     temperature: 0.7,
   };

@@ -1,7 +1,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,30 +9,26 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "./ui/textarea";
-import { Input } from "./ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-const querySchema = z.object({
+const secretSchema = z.object({
   secret: z.string().min(10),
-  query: z.string().min(10),
 });
 
-type GPTQueryFormProps = {
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+type GPTSecretFormProps = {
   setSecret: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function GPTQueryForm({ setQuery, setSecret }: GPTQueryFormProps) {
-  const form = useForm<z.infer<typeof querySchema>>({
-    resolver: zodResolver(querySchema),
+function GPTSecretForm({ setSecret }: GPTSecretFormProps) {
+  const form = useForm<z.infer<typeof secretSchema>>({
+    resolver: zodResolver(secretSchema),
     defaultValues: {
       secret: "",
-      query: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof querySchema>) {
-    setQuery(values.query);
+  function onSubmit(values: z.infer<typeof secretSchema>) {
     setSecret(values.secret);
     console.log(values);
     form.reset();
@@ -44,6 +39,7 @@ function GPTQueryForm({ setQuery, setSecret }: GPTQueryFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-[400px] mt-20 space-y-3"
       >
+        <h1 className="font-medium text-medium text-xl">Step 1: Secret</h1>
         <FormField
           control={form.control}
           name="secret"
@@ -57,27 +53,10 @@ function GPTQueryForm({ setQuery, setSecret }: GPTQueryFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="query"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Query</FormLabel>
-              <FormControl>
-                <Textarea
-                  rows={3}
-                  placeholder="Write something..."
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
 }
 
-export default GPTQueryForm;
+export default GPTSecretForm;
