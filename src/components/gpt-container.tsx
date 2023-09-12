@@ -27,9 +27,10 @@ export type GPTResponse = {
 
 const GPTContainer = () => {
   const [query, setQuery] = React.useState("");
+  const [secret, setSecret] = React.useState("");
   const { isFetching, error, data, refetch } = useQuery<GPTResponse, Error>({
     queryKey: ["test", query],
-    queryFn: () => fetchChatGPTResponse(query),
+    queryFn: () => fetchChatGPTResponse(query, secret),
     enabled: false,
     refetchOnMount: false,
   });
@@ -42,7 +43,7 @@ const GPTContainer = () => {
 
   return (
     <div className="flex h-auto w-screen items-center flex-col justify-start gap-5">
-      <GPTQueryForm setQuery={setQuery} />
+      <GPTQueryForm setQuery={setQuery} setSecret={setSecret} />
       <div className="mb-12">
         {query.length === 0 && !isFetching && (
           <p className="text-base text-foreground">Type a query!</p>
