@@ -1,13 +1,15 @@
+import { TMessage, TModel } from "./types";
+
 export async function fetchChatGPTResponse(
-  query: string,
+  model: TModel,
   secret: string,
-  gptType: string
+  messages: TMessage[]
 ) {
-  console.log(query);
+  console.log(prompt);
 
   const apiRequestBody = {
-    model: gptType,
-    messages: [{ role: "system", content: query }],
+    model: model,
+    messages: [{ role: "system", content: prompt }, ...messages],
     temperature: 0.7,
   };
 

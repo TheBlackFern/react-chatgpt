@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import GPTContainer from "@/components/shared/gpt-container";
+import GPTContainer from "@/components/gpt-container";
 
 const queryClient = new QueryClient();
 
