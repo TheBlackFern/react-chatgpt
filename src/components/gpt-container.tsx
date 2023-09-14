@@ -3,7 +3,7 @@ import GPTForm from "./gpt-form";
 import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
-import GPTMessages from "./gpt-mesages";
+import GPTMessages from "./gpt-messages";
 
 const initialQuery = {
   secret: "",
@@ -40,7 +40,7 @@ const GPTContainer = () => {
   }, [data]);
 
   return (
-    <div className="flex h-auto w-screen items-center flex-col justify-start gap-5">
+    <div className="flex h-auto w-screen items-center flex-col justify-center gap-5 p-7">
       <GPTForm setQuery={setQuery} setMessages={setMessages} />
       <GPTMessages messages={messages} isFetching={isFetching} />
     </div>

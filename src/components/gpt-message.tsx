@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { TMessage } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Copy, CopyCheck } from "lucide-react";
@@ -32,8 +33,8 @@ const GPTMessage = ({ message }: GPTMessageProps) => {
       });
   }
   return (
-    <div className="flex flex-row gap-0.5 font-sans w-auto[text-wrap:balance] max-w-[50vw] px-3 py-1.5 rounded-xl shadow-md even:bg-background even:border-2 odd:bg-primary odd:text-primary-foreground odd:self-start even:self-end">
-      <p
+    <div className="flex flex-row gap-1.5 w-auto[text-wrap:balance] max-w-[50vw] px-3 py-1.5 rounded-xl shadow-md even:bg-background even:border-2 odd:bg-primary odd:text-primary-foreground odd:self-start even:self-end">
+      <ReactMarkdown
         className={
           message.role === "assistant"
             ? "after:h-[1em] after:tracking-[1rem] after:content-['\x000a0']"
@@ -41,7 +42,7 @@ const GPTMessage = ({ message }: GPTMessageProps) => {
         }
       >
         {message.content}
-      </p>
+      </ReactMarkdown>
       <Button
         variant={"outline"}
         onClick={handleCopyClick}

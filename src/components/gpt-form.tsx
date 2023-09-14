@@ -72,10 +72,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
   }
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="fixed w-[400px] mt-20"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[400px]">
         <div
           className={cn({
             hidden: step !== 1,
@@ -183,7 +180,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 <FormDescription>The actual prompt for the AI.</FormDescription>
                 <FormControl>
                   <Textarea
-                    rows={3}
+                    rows={2}
                     placeholder="Write something..."
                     {...field}
                   />
