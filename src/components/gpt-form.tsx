@@ -74,14 +74,14 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-[400px] mt-20 space-y-3"
+        className="fixed w-[400px] mt-20"
       >
         <div
           className={cn({
             hidden: step !== 1,
           })}
         >
-          <h1 className="font-medium text-medium text-xl">
+          <h1 className="font-medium text-medium text-xl mb-3">
             Step 1: Provide a Secret
           </h1>
           <FormField
@@ -89,7 +89,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             name="secret"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Secret</FormLabel>
+                <FormLabel className="text-md">Secret</FormLabel>
                 <FormDescription>
                   To get it, visit the API Keys page of the openAI's website
                 </FormDescription>
@@ -106,13 +106,13 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             hidden: step !== 2,
           })}
         >
-          <h1 className="font-medium text-xl">Step 2: Select a Model</h1>
+          <h1 className="font-medium text-xl mb-3">Step 2: Select a Model</h1>
           <FormField
             control={form.control}
             name="model"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>ChatGPT Version</FormLabel>
+                <FormLabel className="text-md">ChatGPT Version</FormLabel>
                 <FormDescription>
                   This is the model that will be used to run the query.
                 </FormDescription>
@@ -173,13 +173,13 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             hidden: step !== 3,
           })}
         >
-          <h1 className="font-medium text-xl">Step 3: Chat Away!</h1>
+          <h1 className="font-medium text-xl mb-3">Step 3: Chat Away!</h1>
           <FormField
             control={form.control}
             name="prompt"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Prompt</FormLabel>
+                <FormLabel className="text-md">Prompt</FormLabel>
                 <FormDescription>The actual prompt for the AI.</FormDescription>
                 <FormControl>
                   <Textarea
@@ -193,7 +193,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             )}
           />
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-3">
           <Button
             type="submit"
             className={cn({

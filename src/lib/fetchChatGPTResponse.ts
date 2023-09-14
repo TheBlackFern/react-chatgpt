@@ -5,11 +5,17 @@ export async function fetchChatGPTResponse(
   secret: string,
   messages: TMessage[]
 ) {
-  console.log(prompt);
+  console.log(messages);
 
   const apiRequestBody = {
     model: model,
-    messages: [{ role: "system", content: prompt }, ...messages],
+    messages: [
+      {
+        role: "system",
+        content: "I am a student making research using chatgpt",
+      },
+      ...messages,
+    ],
     temperature: 0.7,
   };
 
