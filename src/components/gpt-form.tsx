@@ -26,10 +26,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { TMessage, TModel, gptSchema, models } from "@/lib/types";
+
+const tempComment = (val: number) => {
+  if (val < 0.4) return "Bland";
+  if (val < 0.6) return "Certain";
+  if (val < 0.8) return "Creative";
+  if (val <= 1.0) return "Random";
+};
 
 type GPTFormProps = {
   setQuery: React.Dispatch<
@@ -37,6 +45,7 @@ type GPTFormProps = {
       secret: string;
       model: TModel;
       prompt: string;
+      temperature: number;
     }>
   >;
   setMessages: React.Dispatch<React.SetStateAction<TMessage[]>>;
@@ -51,6 +60,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
       secret: "",
       model: "gpt-4",
       prompt: "",
+      temperature: 0.7,
     },
   });
 
@@ -59,6 +69,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
       model: values.model,
       secret: values.secret,
       prompt: values.prompt,
+      temperature: values.temperature,
     });
     setMessages((prev) => [
       ...prev,
@@ -69,6 +80,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
     ]);
     console.log(values);
     form.resetField("prompt");
+    // form.resetField("temperature");
   }
   return (
     <Form {...form}>
@@ -166,11 +178,40 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           />
         </div>
         <div
-          className={cn({
+          className={cn("flex gap-3 flex-col", {
             hidden: step !== 3,
           })}
         >
-          <h1 className="font-medium text-xl mb-3">Step 3: Chat Away!</h1>
+          <h1 className="font-medium text-xl">Step 3: Chat Away!</h1>
+          <FormField
+            control={form.control}
+            name="temperature"
+            render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <FormLabel className="text-md">Temperature</FormLabel>
+                <FormDescription>
+                  The degree of randomness in AI's answer, the larger the more
+                  random.
+                </FormDescription>
+                <div className="flex flex-row gap-3 w-64">
+                  <FormControl>
+                    <Slider
+                      min={0.2}
+                      max={1.0}
+                      step={0.05}
+                      defaultValue={[value]}
+                      onValueChange={(vals) => {
+                        onChange(vals[0]);
+                      }}
+                    />
+                  </FormControl>
+                  <span className="font-medium">{value}</span>
+                  <span className="font-thin">{tempComment(value)}</span>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="prompt"

@@ -9,6 +9,7 @@ const initialQuery = {
   secret: "",
   model: "gpt-4" as TModel,
   prompt: "",
+  temperature: 0.7,
 };
 
 const GPTContainer = () => {

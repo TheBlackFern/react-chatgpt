@@ -10,8 +10,8 @@ type GPTMessagesProps = {
 const GPTMessages = ({ messages, isFetching }: GPTMessagesProps) => {
   if (messages.length > 0)
     return (
-      <ScrollArea className="w-screen h-[55vh] border-t">
-        <div className="flex flex-col gap-4 p-2">
+      <ScrollArea className="w-screen h-[40vh] border-t">
+        <div className="flex flex-col gap-4 py-2 pl-2 pr-5">
           {messages.map((msg, i) => (
             <GPTMessage message={msg} key={i} />
           ))}
