@@ -1,4 +1,5 @@
 import * as React from "react";
+import { motion } from "framer-motion";
 import GPTForm from "./gpt-form";
 import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
@@ -13,6 +14,8 @@ const initialQuery = {
 };
 
 const GPTContainer = () => {
+  const messagesRef = React.useRef<HTMLDivElement | null>(null);
+  const [translationHeight, setTranslationHeight] = React.useState(0);
   const [messages, setMessages] = React.useState<TMessage[]>([]);
   const [query, setQuery] = React.useState<typeof initialQuery>(initialQuery);
   const { isFetching, data, refetch } = useQuery<GPTResponse, Error>({
@@ -40,10 +43,28 @@ const GPTContainer = () => {
     }
   }, [data]);
 
+  React.useLayoutEffect(() => {
+    messagesRef.current &&
+      setTranslationHeight(messagesRef.current.offsetHeight);
+  }, [messages]);
+
   return (
-    <div className="flex h-auto w-screen items-center flex-col justify-center gap-5 p-7">
-      <GPTForm setQuery={setQuery} setMessages={setMessages} />
-      <GPTMessages messages={messages} isFetching={isFetching} />
+    <div className="flex h-auto w-screen items-center flex-col justify-start p-7">
+      <GPTMessages
+        ref={messagesRef}
+        messages={messages}
+        isFetching={isFetching}
+      />
+      <motion.div
+        animate={{
+          translateY: `${translationHeight}px`,
+        }}
+        transition={{
+          ease: "easeInOut",
+        }}
+      >
+        <GPTForm setQuery={setQuery} setMessages={setMessages} />
+      </motion.div>
     </div>
   );
 };

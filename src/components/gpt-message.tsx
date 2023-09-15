@@ -1,9 +1,9 @@
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import { TMessage } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Copy, CopyCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 type GPTMessageProps = {
   message: TMessage;
@@ -33,16 +33,20 @@ const GPTMessage = ({ message }: GPTMessageProps) => {
       });
   }
   return (
-    <div className="flex flex-row gap-1.5 w-auto[text-wrap:balance] max-w-[50vw] px-3 py-1.5 rounded-xl shadow-md even:bg-background even:border-2 odd:bg-primary odd:text-primary-foreground odd:self-start even:self-end">
-      <ReactMarkdown
+    <motion.div
+      initial={{ opacity: 0, x: 100 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="flex flex-row gap-1.5 w-auto max-w-[66vw] px-3 py-1.5 rounded-xl shadow-md even:bg-background even:border-2 odd:bg-primary odd:text-primary-foreground odd:self-start even:self-end"
+    >
+      <pre
         className={
           message.role === "assistant"
-            ? "after:h-[1em] after:tracking-[1rem] after:content-['\x000a0']"
+            ? "after:h-[1em] whitespace-pre-line after:tracking-[1rem] break-words after:content-['\x000a0']"
             : ""
         }
       >
         {message.content}
-      </ReactMarkdown>
+      </pre>
       <Button
         variant={"outline"}
         onClick={handleCopyClick}
@@ -52,7 +56,7 @@ const GPTMessage = ({ message }: GPTMessageProps) => {
       >
         {isCopied ? <CopyCheck size={18} /> : <Copy size={18} />}
       </Button>
-    </div>
+    </motion.div>
   );
 };
 

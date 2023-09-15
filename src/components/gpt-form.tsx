@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -53,14 +54,16 @@ type GPTFormProps = {
 
 function GPTForm({ setQuery, setMessages }: GPTFormProps) {
   const [step, setStep] = React.useState(1);
+  const [open, setOpen] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
 
   const form = useForm<zodInfer<typeof gptSchema>>({
     resolver: zodResolver(gptSchema),
     defaultValues: {
       secret: "",
       model: "gpt-4",
-      prompt: "",
       temperature: 0.7,
+      prompt: "",
     },
   });
 
@@ -78,17 +81,28 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
         role: "user",
       },
     ]);
+    setSubmitted(true);
     console.log(values);
     form.resetField("prompt");
     // form.resetField("temperature");
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-[400px]">
-        <div
-          className={cn({
-            hidden: step !== 1,
-          })}
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="relative w-[400px] min-h-[400px] overflow-x-hidden"
+      >
+        <motion.div
+          className="p-1"
+          animate={{
+            translateX: `${-(step - 1) * 400}px`,
+          }}
+          style={{
+            translateX: `${-(step - 1) * 400}px`,
+          }}
+          transition={{
+            ease: "easeInOut",
+          }}
         >
           <h1 className="font-medium text-medium text-xl mb-3">
             Step 1: Provide a Secret
@@ -109,11 +123,25 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
               </FormItem>
             )}
           />
-        </div>
-        <div
-          className={cn({
-            hidden: step !== 2,
-          })}
+          <Button
+            type="button"
+            className="flex gap-3 mt-3"
+            onClick={() => setStep((prev) => prev + 1)}
+          >
+            Next
+          </Button>
+        </motion.div>
+        <motion.div
+          className="absolute p-1 top-0 left-0 right-0"
+          animate={{
+            translateX: `${-(step - 2) * 400}px`,
+          }}
+          style={{
+            translateX: `${-(step - 2) * 400}px`,
+          }}
+          transition={{
+            ease: "easeInOut",
+          }}
         >
           <h1 className="font-medium text-xl mb-3">Step 2: Select a Model</h1>
           <FormField
@@ -125,12 +153,13 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 <FormDescription>
                   This is the model that will be used to run the query.
                 </FormDescription>
-                <Popover>
+                <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
                         role="combobox"
+                        aria-expanded={open}
                         className={cn(
                           "w-[200px] justify-between",
                           !field.value && "text-muted-foreground"
@@ -155,6 +184,8 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                             key={model.value}
                             onSelect={() => {
                               form.setValue("model", model.value);
+
+                              setOpen(false);
                             }}
                           >
                             <Check
@@ -176,23 +207,92 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
               </FormItem>
             )}
           />
-        </div>
-        <div
-          className={cn("flex gap-3 flex-col", {
-            hidden: step !== 3,
-          })}
+          <div className="flex gap-3 mt-3">
+            <Button type="button" onClick={() => setStep((prev) => prev + 1)}>
+              Next
+            </Button>
+            <Button
+              type="button"
+              variant={"ghost"}
+              onClick={() => setStep((prev) => prev - 1)}
+            >
+              Back
+            </Button>
+          </div>
+        </motion.div>
+        <motion.div
+          className="flex absolute p-1 left-0 right-0 top-0 gap-3 flex-col"
+          animate={{
+            translateX: `${-(step - 3) * 400}px`,
+          }}
+          style={{
+            translateX: `${-(step - 3) * 400}px`,
+          }}
+          transition={{
+            ease: "easeInOut",
+          }}
         >
-          <h1 className="font-medium text-xl">Step 3: Chat Away!</h1>
+          <AnimatePresence>
+            {!submitted && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <h1 className="font-medium text-xl">Step 3: Chat Away!</h1>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <FormField
+            control={form.control}
+            name="prompt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-md">Prompt</FormLabel>
+                <AnimatePresence>
+                  {!submitted && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <FormDescription>
+                        The actual prompt for the AI.
+                      </FormDescription>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <FormControl>
+                  <Textarea
+                    rows={2}
+                    placeholder="Write something..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="temperature"
             render={({ field: { value, onChange } }) => (
               <FormItem>
                 <FormLabel className="text-md">Temperature</FormLabel>
-                <FormDescription>
-                  The degree of randomness in AI's answer, the larger the more
-                  random.
-                </FormDescription>
+                <AnimatePresence>
+                  {!submitted && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <FormDescription>
+                        The degree of randomness in AI's answer, the larger the
+                        more random.
+                      </FormDescription>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
                 <div className="flex flex-row gap-3 w-64">
                   <FormControl>
                     <Slider
@@ -212,54 +312,18 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="prompt"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-md">Prompt</FormLabel>
-                <FormDescription>The actual prompt for the AI.</FormDescription>
-                <FormControl>
-                  <Textarea
-                    rows={2}
-                    placeholder="Write something..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex gap-3 mt-3">
-          <Button
-            type="submit"
-            className={cn({
-              hidden: step !== 3,
-            })}
-          >
-            Submit
-          </Button>
-          <Button
-            type="button"
-            onClick={() => setStep((prev) => prev + 1)}
-            className={cn({
-              hidden: step === 3,
-            })}
-          >
-            Next
-          </Button>
-          <Button
-            type="button"
-            variant={"ghost"}
-            className={cn({
-              hidden: step === 1,
-            })}
-            onClick={() => setStep((prev) => prev - 1)}
-          >
-            Back
-          </Button>
-        </div>
+
+          <div className="flex gap-3 mt-3">
+            <Button type="submit">Submit</Button>
+            <Button
+              type="button"
+              variant={"ghost"}
+              onClick={() => setStep((prev) => prev - 1)}
+            >
+              Back
+            </Button>
+          </div>
+        </motion.div>
       </form>
     </Form>
   );

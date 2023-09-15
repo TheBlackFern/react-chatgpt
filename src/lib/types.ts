@@ -5,8 +5,8 @@ const modelSchema = z.union([z.literal("gpt-3.5-turbo"), z.literal("gpt-4")]);
 export const gptSchema = z.object({
   secret: z.string().min(10),
   model: modelSchema.default("gpt-4"),
-  prompt: z.string().min(10),
   temperature: z.number().min(0.2).max(1.0).default(0.7),
+  prompt: z.string().min(10),
 });
 
 export type TModel = z.infer<typeof modelSchema>;
