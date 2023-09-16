@@ -26,13 +26,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { cn } from "@/lib/utils";
-
-const tempComment = (val: number) => {
-  if (val < 0.4) return "Bland";
-  if (val < 0.6) return "Certain";
-  if (val < 0.8) return "Creative";
-  if (val <= 1.0) return "Random";
-};
+import { useTranslation } from "react-i18next";
 
 type GPTFormProps = {
   setQuery: React.Dispatch<
@@ -47,8 +41,16 @@ type GPTFormProps = {
 };
 
 function GPTForm({ setQuery, setMessages }: GPTFormProps) {
+  const { t } = useTranslation(["translation"]);
   const [step, setStep] = React.useState(1);
   const [submitted, setSubmitted] = React.useState(false);
+
+  const tempComment = (val: number) => {
+    if (val < 0.4) return t("form.step3.degree.bland");
+    if (val < 0.6) return t("form.step3.degree.certain");
+    if (val < 0.8) return t("form.step3.degree.creative");
+    if (val <= 1.0) return t("form.step3.degree.random");
+  };
 
   const form = useForm<zodInfer<typeof gptSchema>>({
     resolver: zodResolver(gptSchema),
@@ -104,17 +106,17 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           }}
         >
           <h1 className="font-medium text-medium text-xl mb-3">
-            Step 1: Provide a Secret
+            {t("form.step1.heading")}
           </h1>
           <FormField
             control={form.control}
             name="secret"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md">Secret</FormLabel>
-                <FormDescription>
-                  To get it, visit the API Keys page of the openAI's website
-                </FormDescription>
+                <FormLabel className="text-md">
+                  {t("form.step1.title")}
+                </FormLabel>
+                <FormDescription>{t("form.step1.description")}</FormDescription>
                 <FormControl>
                   <Input placeholder="sk-..." {...field} />
                 </FormControl>
@@ -127,7 +129,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             className="flex gap-3 mt-3"
             onClick={onFirstNext}
           >
-            Next
+            {t("form.next")}
           </Button>
         </motion.div>
         <motion.div
@@ -144,23 +146,25 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             ease: "easeInOut",
           }}
         >
-          <h1 className="font-medium text-xl mb-3">Step 2: Select a Model</h1>
+          <h1 className="font-medium text-xl mb-3">
+            {t("form.step2.heading")}
+          </h1>
           <FormField
             control={form.control}
             name="model"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md">ChatGPT Version</FormLabel>
-                <FormDescription>
-                  This is the model that will be used to run the query.
-                </FormDescription>
+                <FormLabel className="text-md">
+                  {t("form.step2.title")}
+                </FormLabel>
+                <FormDescription>{t("form.step2.description")}</FormDescription>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder={t("form.step2.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -174,14 +178,14 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           />
           <div className="flex gap-3 mt-3">
             <Button type="button" onClick={() => setStep((prev) => prev + 1)}>
-              Next
+              {t("form.next")}
             </Button>
             <Button
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
             >
-              Back
+              {t("form.back")}
             </Button>
           </div>
         </motion.div>
@@ -204,7 +208,9 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
                 transition={{ duration: 1, delay: 1 }}
               >
-                <h1 className="font-medium text-xl">Step 3: Chat Away!</h1>
+                <h1 className="font-medium text-xl">
+                  {t("form.step3.heading")}
+                </h1>
               </motion.div>
             )}
           </AnimatePresence>
@@ -213,7 +219,9 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             name="prompt"
             render={({ field }) => (
               <FormItem className="space-y-0">
-                <FormLabel className="text-md block mb-1.5">Prompt</FormLabel>
+                <FormLabel className="text-md block mb-1.5">
+                  {t("form.step3.title1")}
+                </FormLabel>
                 <AnimatePresence>
                   {!submitted && (
                     <motion.div
@@ -226,7 +234,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                       transition={{ duration: 1, delay: 1 }}
                     >
                       <FormDescription>
-                        The actual prompt for the AI.
+                        {t("form.step3.description1")}
                       </FormDescription>
                     </motion.div>
                   )}
@@ -234,7 +242,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 <FormControl>
                   <Textarea
                     rows={2}
-                    placeholder="Write something..."
+                    placeholder={t("form.step3.placeholder")}
                     {...field}
                   />
                 </FormControl>
@@ -248,7 +256,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             render={({ field }) => (
               <FormItem className="mt-3 space-y-0">
                 <FormLabel className="text-md block mb-1.5">
-                  Temperature
+                  {t("form.step3.title2")}
                 </FormLabel>
                 <AnimatePresence>
                   {!submitted && (
@@ -266,14 +274,13 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                       transition={{ duration: 1, delay: 1 }}
                     >
                       <FormDescription>
-                        The degree of randomness in AI's answer, the larger the
-                        more random.
+                        {t("form.step3.description2")}
                       </FormDescription>
                     </motion.div>
                   )}
                 </AnimatePresence>
-                <div className="flex flex-row gap-3 w-64">
-                  <FormControl>
+                <div className="flex flex-row gap-3 w-auto">
+                  <FormControl className="w-48">
                     <Slider
                       min={0.2}
                       max={1.0}
@@ -284,7 +291,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                       }}
                     />
                   </FormControl>
-                  <span className="font-medium">{field.value}</span>
+                  <span className="font-medium w-8">{field.value}</span>
                   <span className="font-thin">{tempComment(field.value)}</span>
                 </div>
                 <FormMessage />
@@ -292,13 +299,13 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             )}
           />
           <div className="flex gap-3 mt-3">
-            <Button type="submit">Submit</Button>
+            <Button type="submit">{t("form.submit")}</Button>
             <Button
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
             >
-              Back
+              {t("form.back")}
             </Button>
           </div>
         </motion.div>
