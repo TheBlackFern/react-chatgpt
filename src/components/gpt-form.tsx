@@ -116,7 +116,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                   To get it, visit the API Keys page of the openAI's website
                 </FormDescription>
                 <FormControl>
-                  <Input type="password" placeholder="sk-..." {...field} />
+                  <Input placeholder="sk-..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
