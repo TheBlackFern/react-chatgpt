@@ -11,16 +11,6 @@ export const gptSchema = z.object({
 
 export type TModel = z.infer<typeof modelSchema>;
 
-type TModels = {
-  readonly label: string;
-  readonly value: TModel;
-};
-
-export const models: TModels[] = [
-  { label: "GPT-3.5 Turbo", value: "gpt-3.5-turbo" },
-  { label: "GPT-4", value: "gpt-4" },
-];
-
 type GPTChoice = {
   message: {
     role: string;

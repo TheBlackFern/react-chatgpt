@@ -11,27 +11,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { TMessage, TModel, gptSchema } from "@/lib/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { TMessage, TModel, gptSchema, models } from "@/lib/types";
 
 const tempComment = (val: number) => {
   if (val < 0.4) return "Bland";
@@ -54,7 +48,6 @@ type GPTFormProps = {
 
 function GPTForm({ setQuery, setMessages }: GPTFormProps) {
   const [step, setStep] = React.useState(1);
-  const [open, setOpen] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
 
   const form = useForm<zodInfer<typeof gptSchema>>({
@@ -67,6 +60,12 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
     },
   });
 
+  function onFirstNext() {
+    form.trigger("secret");
+    const secretState = form.getFieldState("secret");
+    if (!secretState.isDirty || secretState.invalid) return;
+    setStep((prev) => prev + 1);
+  }
   function onSubmit(values: zodInfer<typeof gptSchema>) {
     setQuery({
       model: values.model,
@@ -117,7 +116,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                   To get it, visit the API Keys page of the openAI's website
                 </FormDescription>
                 <FormControl>
-                  <Input placeholder="Write something..." {...field} />
+                  <Input type="password" placeholder="sk-..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,13 +125,15 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           <Button
             type="button"
             className="flex gap-3 mt-3"
-            onClick={() => setStep((prev) => prev + 1)}
+            onClick={onFirstNext}
           >
             Next
           </Button>
         </motion.div>
         <motion.div
-          className="absolute p-1 top-0 left-0 right-0"
+          className={cn("absolute p-1 top-0 left-0 right-0", {
+            "pointer-events-none": step !== 2,
+          })}
           animate={{
             translateX: `${-(step - 2) * 400}px`,
           }}
@@ -148,61 +149,25 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             control={form.control}
             name="model"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem>
                 <FormLabel className="text-md">ChatGPT Version</FormLabel>
                 <FormDescription>
                   This is the model that will be used to run the query.
                 </FormDescription>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className={cn(
-                          "w-[200px] justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? models.find((model) => model.value === field.value)
-                              ?.label
-                          : "Select version"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandInput placeholder="Search framework..." />
-                      <CommandEmpty>No framework found.</CommandEmpty>
-                      <CommandGroup>
-                        {models.map((model) => (
-                          <CommandItem
-                            value={model.label}
-                            key={model.value}
-                            onSelect={() => {
-                              form.setValue("model", model.value);
-
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                model.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {model.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="gpt-3.5-turbo">GPT-3.5-Turbo</SelectItem>
+                    <SelectItem value="gpt-4">GPT-4</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
@@ -221,7 +186,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           </div>
         </motion.div>
         <motion.div
-          className="flex absolute p-1 left-0 right-0 top-0 gap-3 flex-col"
+          className="flex absolute p-1 left-0 right-0 top-0 flex-col"
           animate={{
             translateX: `${-(step - 3) * 400}px`,
           }}
@@ -235,9 +200,9 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           <AnimatePresence>
             {!submitted && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 1, height: "auto", marginBottom: "12px" }}
+                exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
+                transition={{ duration: 1, delay: 1 }}
               >
                 <h1 className="font-medium text-xl">Step 3: Chat Away!</h1>
               </motion.div>
@@ -247,14 +212,18 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             control={form.control}
             name="prompt"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-md">Prompt</FormLabel>
+              <FormItem className="space-y-0">
+                <FormLabel className="text-md block mb-1.5">Prompt</FormLabel>
                 <AnimatePresence>
                   {!submitted && (
                     <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
+                      initial={{
+                        opacity: 1,
+                        height: "auto",
+                        marginBottom: "6px",
+                      }}
+                      exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
+                      transition={{ duration: 1, delay: 1 }}
                     >
                       <FormDescription>
                         The actual prompt for the AI.
@@ -276,15 +245,25 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           <FormField
             control={form.control}
             name="temperature"
-            render={({ field: { value, onChange } }) => (
-              <FormItem>
-                <FormLabel className="text-md">Temperature</FormLabel>
+            render={({ field }) => (
+              <FormItem className="mt-3 space-y-0">
+                <FormLabel className="text-md block mb-1.5">
+                  Temperature
+                </FormLabel>
                 <AnimatePresence>
                   {!submitted && (
                     <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
+                      initial={{
+                        opacity: 1,
+                        height: "auto",
+                        marginBottom: "12px",
+                      }}
+                      exit={{
+                        opacity: 0,
+                        height: 0,
+                        marginBottom: "0px",
+                      }}
+                      transition={{ duration: 1, delay: 1 }}
                     >
                       <FormDescription>
                         The degree of randomness in AI's answer, the larger the
@@ -299,20 +278,19 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                       min={0.2}
                       max={1.0}
                       step={0.05}
-                      defaultValue={[value]}
+                      defaultValue={[field.value]}
                       onValueChange={(vals) => {
-                        onChange(vals[0]);
+                        field.onChange(vals[0]);
                       }}
                     />
                   </FormControl>
-                  <span className="font-medium">{value}</span>
-                  <span className="font-thin">{tempComment(value)}</span>
+                  <span className="font-medium">{field.value}</span>
+                  <span className="font-thin">{tempComment(field.value)}</span>
                 </div>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <div className="flex gap-3 mt-3">
             <Button type="submit">Submit</Button>
             <Button

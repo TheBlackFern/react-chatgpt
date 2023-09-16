@@ -44,9 +44,24 @@ const GPTContainer = () => {
   }, [data]);
 
   React.useLayoutEffect(() => {
-    messagesRef.current &&
+    if (messagesRef.current) {
       setTranslationHeight(messagesRef.current.offsetHeight);
+      // messagesRef.current.scrollIntoView();
+    }
   }, [messages]);
+
+  React.useEffect(() => {
+    function handleWindowResize() {
+      if (messagesRef.current) {
+        setTranslationHeight(messagesRef.current.clientHeight);
+      }
+    }
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
 
   return (
     <div className="flex h-auto w-screen items-center flex-col justify-start p-7">
