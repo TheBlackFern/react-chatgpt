@@ -161,6 +161,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={step !== 2}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -177,13 +178,18 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             )}
           />
           <div className="flex gap-3 mt-3">
-            <Button type="button" onClick={() => setStep((prev) => prev + 1)}>
+            <Button
+              type="button"
+              onClick={() => setStep((prev) => prev + 1)}
+              disabled={step !== 2}
+            >
               {t("form.next")}
             </Button>
             <Button
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
+              disabled={step !== 2}
             >
               {t("form.back")}
             </Button>
@@ -244,6 +250,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                     rows={2}
                     placeholder={t("form.step3.placeholder")}
                     {...field}
+                    disabled={step !== 3}
                   />
                 </FormControl>
                 <FormMessage />
@@ -282,6 +289,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 <div className="flex flex-row gap-3 w-auto">
                   <FormControl className="w-48">
                     <Slider
+                      disabled={step !== 3}
                       min={0.2}
                       max={1.0}
                       step={0.05}
@@ -299,11 +307,14 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             )}
           />
           <div className="flex gap-3 mt-3">
-            <Button type="submit">{t("form.submit")}</Button>
+            <Button type="submit" disabled={step !== 3}>
+              {t("form.submit")}
+            </Button>
             <Button
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
+              disabled={step !== 3}
             >
               {t("form.back")}
             </Button>
