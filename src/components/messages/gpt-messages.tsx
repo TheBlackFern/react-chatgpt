@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TMessage } from "@/lib/types";
 import GPTMessage from "./gpt-message";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 type GPTMessagesProps = {
@@ -17,14 +17,14 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
       return (
         <div
           ref={ref}
-          className="absolute flex flex-col gap-4 w-[1000px] px-20 pb-10"
+          className="absolute flex flex-col gap-4 w-screen max-w-[1000px] px-3 md:px-20 pb-10 pt-7 z-[-1]"
         >
           <AnimatePresence initial={false}>
             {messages.map((msg, i) => (
               <GPTMessage message={msg} key={i} />
             ))}
             {isFetching && (
-              <motion.div
+              <m.div
                 className="self-end"
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -32,7 +32,7 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
                 <p className="font-sans px-3 py-1.5 rounded-xl w-fit shadow-md bg-background border-2 ml-5">
                   {t("typing")}
                 </p>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

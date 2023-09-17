@@ -1,10 +1,10 @@
 import * as React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
 
-import GPTForm from "./form/gpt-form";
+const GPTForm = React.lazy(() => import("./form/gpt-form"));
 const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
 
 const initialQuery = {
@@ -71,7 +71,8 @@ const GPTContainer = () => {
         messages={messages}
         isFetching={isFetching}
       />
-      <motion.div
+      <m.div
+        className="max-w-[400px] p-5 w-screen"
         animate={{
           translateY: `${translationHeight}px`,
         }}
@@ -80,7 +81,7 @@ const GPTContainer = () => {
         }}
       >
         <GPTForm setQuery={setQuery} setMessages={setMessages} />
-      </motion.div>
+      </m.div>
     </div>
   );
 };

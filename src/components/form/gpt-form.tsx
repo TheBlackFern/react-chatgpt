@@ -72,7 +72,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="relative w-[400px] min-h-[400px] overflow-x-hidden"
+        className="relative min-h-[400px] overflow-x-hidden"
       >
         <GPTFormStep1 form={form} step={step} onFirstNext={onFirstNext} />
         <GPTFormStep2

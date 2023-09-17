@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
@@ -36,7 +36,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
   };
 
   return (
-    <motion.div
+    <m.div
       className="flex absolute p-1 left-0 right-0 top-0 flex-col"
       animate={{
         translateX: `${-(step - 3) * 400}px`,
@@ -50,13 +50,13 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
     >
       <AnimatePresence>
         {!submitted && (
-          <motion.div
+          <m.div
             initial={{ opacity: 1, height: "auto", marginBottom: "12px" }}
             exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
             transition={{ duration: 1, delay: 1 }}
           >
             <h1 className="font-medium text-xl">{t("step3.heading")}</h1>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
       <FormField
@@ -69,7 +69,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
             </FormLabel>
             <AnimatePresence>
               {!submitted && (
-                <motion.div
+                <m.div
                   initial={{
                     opacity: 1,
                     height: "auto",
@@ -79,7 +79,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
                   transition={{ duration: 1, delay: 1 }}
                 >
                   <FormDescription>{t("step3.description1")}</FormDescription>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
             <FormControl>
@@ -104,7 +104,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
             </FormLabel>
             <AnimatePresence>
               {!submitted && (
-                <motion.div
+                <m.div
                   initial={{
                     opacity: 1,
                     height: "auto",
@@ -118,7 +118,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
                   transition={{ duration: 1, delay: 1 }}
                 >
                   <FormDescription>{t("step3.description2")}</FormDescription>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
             <div className="flex flex-row gap-3 w-auto">
@@ -158,7 +158,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
           {t("back")}
         </Button>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

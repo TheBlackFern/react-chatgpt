@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   FormControl,
   FormDescription,
@@ -39,7 +39,7 @@ const GPTFormStep2 = ({
 }: GPTFormStep2Props) => {
   const { t } = useTranslation(["form"]);
   return (
-    <motion.div
+    <m.div
       className={cn("absolute p-1 top-0 left-0 right-0", {
         "pointer-events-none": step !== 2,
       })}
@@ -93,7 +93,7 @@ const GPTFormStep2 = ({
           {t("back")}
         </Button>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

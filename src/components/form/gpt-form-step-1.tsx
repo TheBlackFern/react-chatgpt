@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   FormControl,
   FormDescription,
@@ -26,7 +26,7 @@ type GPTFormStep1Props = {
 const GPTFormStep1 = ({ step, form, onFirstNext }: GPTFormStep1Props) => {
   const { t } = useTranslation(["form"]);
   return (
-    <motion.div
+    <m.div
       className="p-1"
       animate={{
         translateX: `${-(step - 1) * 400}px`,
@@ -58,7 +58,7 @@ const GPTFormStep1 = ({ step, form, onFirstNext }: GPTFormStep1Props) => {
       <Button type="button" className="flex gap-3 mt-3" onClick={onFirstNext}>
         {t("next")}
       </Button>
-    </motion.div>
+    </m.div>
   );
 };
 
