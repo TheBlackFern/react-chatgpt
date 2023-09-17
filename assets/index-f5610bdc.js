@@ -1,0 +1,1 @@
+import{r as t}from"./index-b2109e74.js";function n(r,[e,u]){return Math.min(u,Math.max(e,r))}function a(r){const e=t.useRef({value:r,previous:r});return t.useMemo(()=>(e.current.value!==r&&(e.current.previous=e.current.value,e.current.value=r),e.current.previous),[r])}export{a as $,n as a};
