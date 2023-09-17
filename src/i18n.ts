@@ -30,6 +30,7 @@ i18n
             system: "System",
           },
           form: {
+            typing: "Typing...",
             next: "Next",
             back: "Back",
             submit: "Submit",
@@ -74,6 +75,7 @@ i18n
             system: "Системная",
           },
           form: {
+            typing: "Обработка...",
             next: "Далее",
             back: "Назад",
             submit: "Отправить",

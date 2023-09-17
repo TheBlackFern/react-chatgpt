@@ -2,6 +2,7 @@ import * as React from "react";
 import { TMessage } from "@/lib/types";
 import GPTMessage from "./gpt-message";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 type GPTMessagesProps = {
   messages: TMessage[];
@@ -10,6 +11,8 @@ type GPTMessagesProps = {
 
 const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
   ({ messages, isFetching }, ref) => {
+    const { t } = useTranslation(["translation"]);
+
     if (messages.length > 0)
       return (
         <div
@@ -27,7 +30,7 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
                 animate={{ opacity: 1, x: 0 }}
               >
                 <p className="font-sans px-3 py-1.5 rounded-xl w-fit shadow-md bg-background border-2 ml-5">
-                  Typing...
+                  {t("form.typing")}
                 </p>
               </motion.div>
             )}
