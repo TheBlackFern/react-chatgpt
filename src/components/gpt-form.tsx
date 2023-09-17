@@ -41,15 +41,15 @@ type GPTFormProps = {
 };
 
 function GPTForm({ setQuery, setMessages }: GPTFormProps) {
-  const { t } = useTranslation(["translation"]);
+  const { t } = useTranslation(["form"]);
   const [step, setStep] = React.useState(1);
   const [submitted, setSubmitted] = React.useState(false);
 
   const tempComment = (val: number) => {
-    if (val < 0.4) return t("form.step3.degree.bland");
-    if (val < 0.6) return t("form.step3.degree.certain");
-    if (val < 0.8) return t("form.step3.degree.creative");
-    if (val <= 1.0) return t("form.step3.degree.random");
+    if (val < 0.4) return t("degree.bland");
+    if (val < 0.6) return t("degree.certain");
+    if (val < 0.8) return t("degree.creative");
+    if (val <= 1.0) return t("degree.random");
   };
 
   const form = useForm<zodInfer<typeof gptSchema>>({
@@ -106,17 +106,15 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           }}
         >
           <h1 className="font-medium text-medium text-xl mb-3">
-            {t("form.step1.heading")}
+            {t("step1.heading")}
           </h1>
           <FormField
             control={form.control}
             name="secret"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md">
-                  {t("form.step1.title")}
-                </FormLabel>
-                <FormDescription>{t("form.step1.description")}</FormDescription>
+                <FormLabel className="text-md">{t("step1.title")}</FormLabel>
+                <FormDescription>{t("step1.description")}</FormDescription>
                 <FormControl>
                   <Input placeholder="sk-..." {...field} />
                 </FormControl>
@@ -129,7 +127,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             className="flex gap-3 mt-3"
             onClick={onFirstNext}
           >
-            {t("form.next")}
+            {t("next")}
           </Button>
         </motion.div>
         <motion.div
@@ -146,18 +144,14 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             ease: "easeInOut",
           }}
         >
-          <h1 className="font-medium text-xl mb-3">
-            {t("form.step2.heading")}
-          </h1>
+          <h1 className="font-medium text-xl mb-3">{t("step2.heading")}</h1>
           <FormField
             control={form.control}
             name="model"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-md">
-                  {t("form.step2.title")}
-                </FormLabel>
-                <FormDescription>{t("form.step2.description")}</FormDescription>
+                <FormLabel className="text-md">{t("step2.title")}</FormLabel>
+                <FormDescription>{t("step2.description")}</FormDescription>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -165,7 +159,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t("form.step2.placeholder")} />
+                      <SelectValue placeholder={t("step2.placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -183,7 +177,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
               onClick={() => setStep((prev) => prev + 1)}
               disabled={step !== 2}
             >
-              {t("form.next")}
+              {t("next")}
             </Button>
             <Button
               type="button"
@@ -191,7 +185,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
               onClick={() => setStep((prev) => prev - 1)}
               disabled={step !== 2}
             >
-              {t("form.back")}
+              {t("back")}
             </Button>
           </div>
         </motion.div>
@@ -214,9 +208,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
                 transition={{ duration: 1, delay: 1 }}
               >
-                <h1 className="font-medium text-xl">
-                  {t("form.step3.heading")}
-                </h1>
+                <h1 className="font-medium text-xl">{t("step3.heading")}</h1>
               </motion.div>
             )}
           </AnimatePresence>
@@ -226,7 +218,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             render={({ field }) => (
               <FormItem className="space-y-0">
                 <FormLabel className="text-md block mb-1.5">
-                  {t("form.step3.title1")}
+                  {t("step3.title1")}
                 </FormLabel>
                 <AnimatePresence>
                   {!submitted && (
@@ -240,7 +232,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                       transition={{ duration: 1, delay: 1 }}
                     >
                       <FormDescription>
-                        {t("form.step3.description1")}
+                        {t("step3.description1")}
                       </FormDescription>
                     </motion.div>
                   )}
@@ -248,7 +240,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                 <FormControl>
                   <Textarea
                     rows={2}
-                    placeholder={t("form.step3.placeholder")}
+                    placeholder={t("step3.placeholder")}
                     {...field}
                     disabled={step !== 3}
                   />
@@ -263,7 +255,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             render={({ field }) => (
               <FormItem className="mt-3 space-y-0">
                 <FormLabel className="text-md block mb-1.5">
-                  {t("form.step3.title2")}
+                  {t("step3.title2")}
                 </FormLabel>
                 <AnimatePresence>
                   {!submitted && (
@@ -281,7 +273,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
                       transition={{ duration: 1, delay: 1 }}
                     >
                       <FormDescription>
-                        {t("form.step3.description2")}
+                        {t("step3.description2")}
                       </FormDescription>
                     </motion.div>
                   )}
@@ -308,7 +300,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
           />
           <div className="flex gap-3 mt-3">
             <Button type="submit" disabled={step !== 3}>
-              {t("form.submit")}
+              {t("submit")}
             </Button>
             <Button
               type="button"
@@ -316,7 +308,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
               onClick={() => setStep((prev) => prev - 1)}
               disabled={step !== 3}
             >
-              {t("form.back")}
+              {t("back")}
             </Button>
           </div>
         </motion.div>

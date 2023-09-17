@@ -11,7 +11,7 @@ type GPTMessagesProps = {
 
 const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
   ({ messages, isFetching }, ref) => {
-    const { t } = useTranslation(["translation"]);
+    const { t } = useTranslation(["messages"]);
 
     if (messages.length > 0)
       return (
@@ -30,7 +30,7 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
                 animate={{ opacity: 1, x: 0 }}
               >
                 <p className="font-sans px-3 py-1.5 rounded-xl w-fit shadow-md bg-background border-2 ml-5">
-                  {t("form.typing")}
+                  {t("typing")}
                 </p>
               </motion.div>
             )}
