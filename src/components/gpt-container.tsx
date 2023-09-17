@@ -1,10 +1,11 @@
 import * as React from "react";
 import { motion } from "framer-motion";
-import GPTForm from "./gpt-form";
 import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
-import GPTMessages from "./gpt-messages";
+
+import GPTForm from "./form/gpt-form";
+const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
 
 const initialQuery = {
   secret: "",
@@ -29,7 +30,7 @@ const GPTContainer = () => {
     if (query.prompt.length > 0) {
       refetch();
     }
-  }, [query.prompt]);
+  }, [query.prompt, refetch]);
 
   React.useEffect(() => {
     if (data && data.choices[0]?.message?.content.length > 0) {
