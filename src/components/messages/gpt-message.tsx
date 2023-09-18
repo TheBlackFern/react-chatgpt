@@ -12,7 +12,12 @@ const GPTMessage = ({ message }: GPTMessageProps) => {
     <m.div
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
-      className="flex flex-row gap-1.5 w-auto max-w-[66vw] px-3 py-1.5 rounded-xl shadow-md even:bg-background even:border-2 odd:bg-primary odd:text-primary-foreground odd:self-start even:self-end"
+      className={cn(
+        "flex flex-row gap-1.5 w-auto max-w-[66vw] px-3 py-1.5 rounded-xl shadow-md",
+        message.role === "user"
+          ? "bg-primary text-primary-foreground self-start"
+          : "border-2 bg-background self-end"
+      )}
     >
       <pre
         className={cn(
