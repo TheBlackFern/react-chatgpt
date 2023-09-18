@@ -134,7 +134,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
                   }}
                 />
               </FormControl>
-              <span className="font-medium w-8">{field.value}</span>
+              <span className="font-medium w-8">{field.value.toFixed(2)}</span>
               <span className="font-thin">{tempComment(field.value)}</span>
             </div>
             <FormMessage />

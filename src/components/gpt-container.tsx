@@ -1,8 +1,9 @@
 import * as React from "react";
-import { m } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
+import ScrollButton from "./messages/scroll-button";
 
 const GPTForm = React.lazy(() => import("./form/gpt-form"));
 const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
@@ -16,6 +17,8 @@ const initialQuery = {
 
 const GPTContainer = () => {
   const messagesRef = React.useRef<HTMLDivElement | null>(null);
+  const formRef = React.useRef<HTMLDivElement | null>(null);
+  const canScroll = useInView(formRef, { amount: 0.5 });
   const [translationHeight, setTranslationHeight] = React.useState(0);
   const [messages, setMessages] = React.useState<TMessage[]>([]);
   const [query, setQuery] = React.useState<typeof initialQuery>(initialQuery);
@@ -47,6 +50,12 @@ const GPTContainer = () => {
   }, [messages]);
 
   React.useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  React.useEffect(() => {
     function handleWindowResize() {
       if (messagesRef.current) {
         setTranslationHeight(messagesRef.current.clientHeight);
@@ -60,13 +69,19 @@ const GPTContainer = () => {
   }, []);
 
   return (
-    <div className="flex h-auto w-full items-center flex-col justify-start p-7">
+    <div className="flex relative h-auto w-full items-center flex-col justify-start p-7">
+      <ScrollButton
+        targetRef={formRef}
+        canScroll={canScroll}
+        className="fixed bottom-3 right-3 md:bottom-8 md:right-8"
+      />
       <GPTMessages
         ref={messagesRef}
         messages={messages}
         isFetching={isFetching}
       />
       <m.div
+        ref={formRef}
         className="max-w-[400px] p-5 w-screen"
         animate={{
           translateY: `${translationHeight}px`,
