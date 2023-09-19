@@ -21,7 +21,7 @@ const GPTContainer = () => {
   const [translationHeight, setTranslationHeight] = React.useState(0);
   const [messages, setMessages] = React.useState<TMessage[]>([]);
   const [query, setQuery] = React.useState<typeof initialQuery>(initialQuery);
-  const { isFetching, data } = useQuery<GPTResponse, Error>({
+  const { isFetching, error, data } = useQuery<GPTResponse, Error>({
     queryKey: ["test", query.prompt],
     queryFn: () => fetchChatGPTResponse(query.model, query.secret, messages),
     enabled: messages.length > 0,
@@ -30,7 +30,12 @@ const GPTContainer = () => {
   });
 
   React.useEffect(() => {
-    if (data && data.choices[0]?.message?.content.length > 0) {
+    if (
+      data &&
+      data.choices[0] &&
+      data.choices[0].message &&
+      data.choices[0].message.content.length > 0
+    ) {
       setMessages((prev) => [
         ...prev,
         {
@@ -76,6 +81,7 @@ const GPTContainer = () => {
       <GPTMessages
         ref={messagesRef}
         messages={messages}
+        error={error}
         isFetching={isFetching}
       />
       <m.div

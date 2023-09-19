@@ -1,3 +1,4 @@
 {
-  "typing": "Typing..."
+  "typing": "Typing...",
+  "error": "Your last query resulted in an error. Please, retry"
 }

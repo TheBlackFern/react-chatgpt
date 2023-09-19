@@ -6,11 +6,12 @@ import { useTranslation } from "react-i18next";
 
 type GPTMessagesProps = {
   messages: TMessage[];
+  error: Error | null;
   isFetching: boolean;
 };
 
 const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
-  ({ messages, isFetching }, ref) => {
+  ({ messages, error, isFetching }, ref) => {
     const { t } = useTranslation(["messages"]);
 
     if (messages.length > 0)
@@ -35,6 +36,9 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
               </m.div>
             )}
           </AnimatePresence>
+          {error && (
+            <p className="text-destructive font-medium text-lg">{t("error")}</p>
+          )}
         </div>
       );
     return null;
