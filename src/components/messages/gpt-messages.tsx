@@ -17,7 +17,7 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
       return (
         <div
           ref={ref}
-          className="absolute flex flex-col gap-4 w-full max-w-[1000px] px-3 md:px-20 pb-10 pt-7 z-[-1]"
+          className="absolute flex flex-col gap-4 w-full max-w-[1000px] px-3 md:px-20 pb-10 pt-7 z-10"
         >
           <AnimatePresence initial={false}>
             {messages.map((msg, i) => (

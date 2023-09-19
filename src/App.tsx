@@ -22,7 +22,7 @@ function App() {
     >
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <QueryClientProvider client={queryClient}>
-          <div className="absolute z-10 flex flex-row gap-2 top-3 right-3 md:right-8">
+          <div className="absolute z-20 flex flex-row gap-2 top-3 right-3 md:right-8">
             <LanguageToggle />
             <ThemeToggle />
           </div>
