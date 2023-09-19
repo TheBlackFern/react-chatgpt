@@ -2,17 +2,15 @@ import * as React from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { useInView } from "framer-motion";
 
 type ScrollButtonProps = {
-  canScroll: boolean;
   targetRef: React.MutableRefObject<HTMLDivElement | null>;
 } & React.HTMLAttributes<HTMLButtonElement>;
 
-const ScrollButton = ({
-  canScroll,
-  targetRef,
-  className,
-}: ScrollButtonProps) => {
+const ScrollButton = ({ targetRef, className }: ScrollButtonProps) => {
+  const canScroll = useInView(targetRef, { amount: 0.5 });
+
   function handleClick() {
     if (targetRef.current) {
       targetRef.current.scrollIntoView({ behavior: "smooth" });

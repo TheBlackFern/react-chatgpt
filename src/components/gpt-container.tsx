@@ -1,5 +1,5 @@
 import * as React from "react";
-import { m, useInView } from "framer-motion";
+import { m } from "framer-motion";
 import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
@@ -18,7 +18,6 @@ const initialQuery = {
 const GPTContainer = () => {
   const messagesRef = React.useRef<HTMLDivElement | null>(null);
   const formRef = React.useRef<HTMLDivElement | null>(null);
-  const canScroll = useInView(formRef, { amount: 0.5 });
   const [translationHeight, setTranslationHeight] = React.useState(0);
   const [messages, setMessages] = React.useState<TMessage[]>([]);
   const [query, setQuery] = React.useState<typeof initialQuery>(initialQuery);
@@ -72,7 +71,6 @@ const GPTContainer = () => {
     <div className="flex relative h-auto w-full items-center flex-col justify-start p-7">
       <ScrollButton
         targetRef={formRef}
-        canScroll={canScroll}
         className="fixed bottom-3 right-3 md:bottom-8 md:right-8"
       />
       <GPTMessages
