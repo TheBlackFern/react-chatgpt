@@ -84,6 +84,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
             </AnimatePresence>
             <FormControl>
               <Textarea
+                data-testid="form-textarea"
                 rows={2}
                 placeholder={t("step3.placeholder")}
                 {...field}
@@ -124,6 +125,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
             <div className="flex flex-row gap-3 w-auto">
               <FormControl className="w-48">
                 <Slider
+                  data-testid="form-slider"
                   disabled={step !== 3}
                   min={0.2}
                   max={1.0}
@@ -143,6 +145,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
       />
       <div className="flex gap-3 mt-3">
         <Button
+          data-testid="submit"
           type="submit"
           onClick={() => setSubmitted(true)}
           disabled={step !== 3}
@@ -150,6 +153,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
           {t("submit")}
         </Button>
         <Button
+          data-testid="back-step-2"
           type="button"
           variant={"ghost"}
           onClick={onBack}

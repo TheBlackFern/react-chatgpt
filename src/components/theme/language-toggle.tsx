@@ -14,7 +14,7 @@ export function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button data-testid="lang-switch" variant="outline" size="icon">
           {lang?.toLocaleUpperCase()}
         </Button>
       </DropdownMenuTrigger>

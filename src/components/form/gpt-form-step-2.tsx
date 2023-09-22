@@ -81,10 +81,16 @@ const GPTFormStep2 = ({
         )}
       />
       <div className="flex gap-3 mt-3">
-        <Button type="button" onClick={onSecondNext} disabled={step !== 2}>
+        <Button
+          data-testid="next-step-2"
+          type="button"
+          onClick={onSecondNext}
+          disabled={step !== 2}
+        >
           {t("next")}
         </Button>
         <Button
+          data-testid="back-step-2"
           type="button"
           variant={"ghost"}
           onClick={onBack}

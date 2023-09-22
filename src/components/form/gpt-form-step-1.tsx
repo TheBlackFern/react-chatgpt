@@ -49,13 +49,18 @@ const GPTFormStep1 = ({ step, form, onFirstNext }: GPTFormStep1Props) => {
             <FormLabel className="text-md">{t("step1.title")}</FormLabel>
             <FormDescription>{t("step1.description")}</FormDescription>
             <FormControl>
-              <Input placeholder="sk-..." {...field} />
+              <Input data-testid="form-input" placeholder="sk-..." {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-      <Button type="button" className="flex gap-3 mt-3" onClick={onFirstNext}>
+      <Button
+        data-testid="next-step-1"
+        type="button"
+        className="flex gap-3 mt-3"
+        onClick={onFirstNext}
+      >
         {t("next")}
       </Button>
     </m.div>
