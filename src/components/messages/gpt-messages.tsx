@@ -37,7 +37,9 @@ const GPTMessages = React.forwardRef<HTMLDivElement, GPTMessagesProps>(
             )}
           </AnimatePresence>
           {error && (
-            <p className="text-destructive font-medium text-lg">{t("error")}</p>
+            <p className="text-destructive text-center [text-wrap:balance] font-medium text-lg">
+              {t("error")} {error.message === "401" ? t("error-cred") : ""}
+            </p>
           )}
         </div>
       );
