@@ -1,0 +1,1 @@
+const r="Typing...",e="Your last query resulted in an error. Please, retry.",o={typing:r,error:e,"error-cred":"It is likely your secret code is wrong or invalid."};export{o as default,e as error,r as typing};
