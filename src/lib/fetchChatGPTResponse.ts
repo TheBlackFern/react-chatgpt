@@ -28,6 +28,7 @@ export async function fetchChatGPTResponse(
     },
     body: JSON.stringify(apiRequestBody),
   });
-
-  return response.json();
+  if (response.ok) {
+    return response.json();
+  } else throw new Error(`${response.status}`);
 }

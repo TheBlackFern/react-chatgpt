@@ -1,4 +1,5 @@
 {
   "typing": "Typing...",
-  "error": "Your last query resulted in an error. Please, retry"
+  "error": "Your last query resulted in an error. Please, retry.",
+  "error-cred": "It is likely your secret code is wrong or invalid."
 }
