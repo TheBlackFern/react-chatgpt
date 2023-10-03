@@ -4,6 +4,9 @@ import { GPTResponse, TMessage, TModel } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
 import ScrollButton from "./messages/scroll-button";
+import { Toaster } from "./ui/toaster";
+import { useToast } from "./ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 const GPTForm = React.lazy(() => import("./form/gpt-form"));
 const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
@@ -28,6 +31,8 @@ const GPTContainer = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
+  const { toast } = useToast();
+  const { t } = useTranslation(["messages"]);
 
   React.useEffect(() => {
     if (
@@ -72,6 +77,15 @@ const GPTContainer = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (error) {
+      toast({
+        title: t("error"),
+        description: error?.message === "401" ? t("error-cred") : "",
+      });
+    }
+  }, [error]);
+
   return (
     <div className="flex relative h-auto w-full items-center flex-col justify-start p-7">
       <ScrollButton
@@ -81,7 +95,6 @@ const GPTContainer = () => {
       <GPTMessages
         ref={messagesRef}
         messages={messages}
-        error={error}
         isFetching={isFetching}
       />
       <m.div
@@ -96,6 +109,7 @@ const GPTContainer = () => {
       >
         <GPTForm setQuery={setQuery} setMessages={setMessages} />
       </m.div>
+      <Toaster />
     </div>
   );
 };
