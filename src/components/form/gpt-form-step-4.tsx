@@ -2,7 +2,6 @@ import * as React from "react";
 import { AnimatePresence, m } from "framer-motion";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Button } from "../ui/button";
 import {
   FormControl,
   FormDescription,
@@ -22,11 +21,18 @@ type GPTFormStep3Props = {
     temperature: number;
     prompt: string;
   }>;
-  onBack: () => void;
+  submitted: boolean;
+  children: React.ReactNode;
 };
 
-const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
-  const [submitted, setSubmitted] = React.useState(false);
+const CURRENT_STEP = 3;
+
+const GPTFormStep3 = ({
+  step,
+  form,
+  submitted,
+  children,
+}: GPTFormStep3Props) => {
   const { t } = useTranslation(["form"]);
   const tempComment = (val: number) => {
     if (val < 0.4) return t("degree.bland");
@@ -39,10 +45,10 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
     <m.div
       className="flex absolute p-1 left-0 right-0 top-0 flex-col"
       animate={{
-        translateX: `${-(step - 3) * 400}px`,
+        translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
       style={{
-        translateX: `${-(step - 3) * 400}px`,
+        translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
       transition={{
         ease: "easeInOut",
@@ -88,7 +94,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
                 rows={2}
                 placeholder={t("step3.placeholder")}
                 {...field}
-                disabled={step !== 3}
+                disabled={step !== CURRENT_STEP}
               />
             </FormControl>
             <FormMessage />
@@ -126,7 +132,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
               <FormControl className="w-48">
                 <Slider
                   data-testid="form-slider"
-                  disabled={step !== 3}
+                  disabled={step !== CURRENT_STEP}
                   min={0.2}
                   max={1.0}
                   step={0.05}
@@ -143,25 +149,7 @@ const GPTFormStep3 = ({ step, form, onBack }: GPTFormStep3Props) => {
           </FormItem>
         )}
       />
-      <div className="flex gap-3 mt-3">
-        <Button
-          data-testid="submit"
-          type="submit"
-          onClick={() => setSubmitted(true)}
-          disabled={step !== 3}
-        >
-          {t("submit")}
-        </Button>
-        <Button
-          data-testid="back-step-2"
-          type="button"
-          variant={"ghost"}
-          onClick={onBack}
-          disabled={step !== 3}
-        >
-          {t("back")}
-        </Button>
-      </div>
+      {children}
     </m.div>
   );
 };

@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Button } from "../ui/button";
 import { useTranslation } from "react-i18next";
 
 type GPTFormStep2Props = {
@@ -27,27 +26,23 @@ type GPTFormStep2Props = {
     temperature: number;
     prompt: string;
   }>;
-  onSecondNext: () => void;
-  onBack: () => void;
+  children: React.ReactNode;
 };
 
-const GPTFormStep2 = ({
-  step,
-  form,
-  onSecondNext,
-  onBack,
-}: GPTFormStep2Props) => {
+const CURRENT_STEP = 2;
+
+const GPTFormStep2 = ({ step, form, children }: GPTFormStep2Props) => {
   const { t } = useTranslation(["form"]);
   return (
     <m.div
       className={cn("absolute p-1 top-0 left-0 right-0", {
-        "pointer-events-none": step !== 2,
+        "pointer-events-none": step !== CURRENT_STEP,
       })}
       animate={{
-        translateX: `${-(step - 2) * 400}px`,
+        translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
       style={{
-        translateX: `${-(step - 2) * 400}px`,
+        translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
       transition={{
         ease: "easeInOut",
@@ -64,7 +59,7 @@ const GPTFormStep2 = ({
             <Select
               onValueChange={field.onChange}
               defaultValue={field.value}
-              disabled={step !== 2}
+              disabled={step !== CURRENT_STEP}
             >
               <FormControl>
                 <SelectTrigger>
@@ -80,25 +75,7 @@ const GPTFormStep2 = ({
           </FormItem>
         )}
       />
-      <div className="flex gap-3 mt-3">
-        <Button
-          data-testid="next-step-2"
-          type="button"
-          onClick={onSecondNext}
-          disabled={step !== 2}
-        >
-          {t("next")}
-        </Button>
-        <Button
-          data-testid="back-step-2"
-          type="button"
-          variant={"ghost"}
-          onClick={onBack}
-          disabled={step !== 2}
-        >
-          {t("back")}
-        </Button>
-      </div>
+      {children}
     </m.div>
   );
 };

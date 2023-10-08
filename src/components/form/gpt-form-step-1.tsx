@@ -9,7 +9,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { useTranslation } from "react-i18next";
-import { Button } from "../ui/button";
 import { UseFormReturn } from "react-hook-form";
 
 type GPTFormStep1Props = {
@@ -20,19 +19,21 @@ type GPTFormStep1Props = {
     temperature: number;
     prompt: string;
   }>;
-  onFirstNext: () => void;
+  children: React.ReactNode;
 };
 
-const GPTFormStep1 = ({ step, form, onFirstNext }: GPTFormStep1Props) => {
+const CURRENT_STEP = 1;
+
+const GPTFormStep1 = ({ step, form, children }: GPTFormStep1Props) => {
   const { t } = useTranslation(["form"]);
   return (
     <m.div
       className="p-1"
       animate={{
-        translateX: `${-(step - 1) * 400}px`,
+        translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
       style={{
-        translateX: `${-(step - 1) * 400}px`,
+        translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
       transition={{
         ease: "easeInOut",
@@ -49,20 +50,18 @@ const GPTFormStep1 = ({ step, form, onFirstNext }: GPTFormStep1Props) => {
             <FormLabel className="text-md">{t("step1.title")}</FormLabel>
             <FormDescription>{t("step1.description")}</FormDescription>
             <FormControl>
-              <Input data-testid="form-input" placeholder="sk-..." {...field} />
+              <Input
+                {...field}
+                data-testid="form-input"
+                placeholder="sk-..."
+                disabled={step !== CURRENT_STEP}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-      <Button
-        data-testid="next-step-1"
-        type="button"
-        className="flex gap-3 mt-3"
-        onClick={onFirstNext}
-      >
-        {t("next")}
-      </Button>
+      {children}
     </m.div>
   );
 };

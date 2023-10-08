@@ -3,12 +3,14 @@ import { infer as zodInfer } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
+import { Button } from "../ui/button";
 
+import { useTranslation } from "react-i18next";
 import { TMessage, TModel, gptSchema } from "@/lib/types";
 
 import GPTFormStep1 from "./gpt-form-step-1";
 const GPTFormStep2 = React.lazy(() => import("./gpt-form-step-2"));
-const GPTFormStep3 = React.lazy(() => import("./gpt-form-step-3"));
+const GPTFormStep3 = React.lazy(() => import("./gpt-form-step-4"));
 
 type GPTFormProps = {
   setQuery: React.Dispatch<
@@ -24,6 +26,9 @@ type GPTFormProps = {
 
 function GPTForm({ setQuery, setMessages }: GPTFormProps) {
   const [step, setStep] = React.useState(1);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  const { t } = useTranslation(["form"]);
 
   const form = useForm<zodInfer<typeof gptSchema>>({
     resolver: zodResolver(gptSchema),
@@ -38,19 +43,16 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
   function onFirstNext() {
     form.trigger("secret");
     const secretState = form.getFieldState("secret");
-    if (!secretState.isDirty || secretState.invalid) return;
+    // console.log(!secretState.isDirty, secretState.invalid);
+    // TODO: this sometimes fails to correctly check
+    if (!secretState.isDirty || secretState.invalid) {
+      return;
+    }
     setStep((prev) => prev + 1);
-  }
-
-  function onSecondNext() {
-    setStep((prev) => prev + 1);
-  }
-
-  function onBack() {
-    setStep((prev) => prev - 1);
   }
 
   function onSubmit(values: zodInfer<typeof gptSchema>) {
+    setSubmitted(true);
     setQuery({
       model: values.model,
       secret: values.secret,
@@ -74,14 +76,54 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative min-h-[400px] mt-1 overflow-x-hidden"
       >
-        <GPTFormStep1 form={form} step={step} onFirstNext={onFirstNext} />
-        <GPTFormStep2
-          form={form}
-          step={step}
-          onSecondNext={onSecondNext}
-          onBack={onBack}
-        />
-        <GPTFormStep3 form={form} step={step} onBack={onBack} />
+        <GPTFormStep1 form={form} step={step}>
+          <Button
+            data-testid="next-step-1"
+            type="button"
+            className="flex gap-3 mt-3"
+            disabled={step !== 1}
+            onClick={onFirstNext}
+          >
+            {t("next")}
+          </Button>
+        </GPTFormStep1>
+        <GPTFormStep2 form={form} step={step}>
+          <div className="flex gap-3 mt-3">
+            <Button
+              data-testid="next-step-2"
+              type="button"
+              onClick={() => setStep((prev) => prev + 1)}
+              disabled={step !== 2}
+            >
+              {t("next")}
+            </Button>
+            <Button
+              data-testid="back-step-2"
+              type="button"
+              variant={"ghost"}
+              onClick={() => setStep((prev) => prev - 1)}
+              disabled={step !== 2}
+            >
+              {t("back")}
+            </Button>
+          </div>
+        </GPTFormStep2>
+        <GPTFormStep3 form={form} step={step} submitted={submitted}>
+          <div className="flex gap-3 mt-3">
+            <Button data-testid="submit" type="submit" disabled={step !== 3}>
+              {t("submit")}
+            </Button>
+            <Button
+              data-testid="back-step-2"
+              type="button"
+              variant={"ghost"}
+              onClick={() => setStep((prev) => prev - 1)}
+              disabled={step !== 3}
+            >
+              {t("back")}
+            </Button>
+          </div>
+        </GPTFormStep3>
       </form>
     </Form>
   );
