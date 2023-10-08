@@ -10,10 +10,11 @@ type GPTMessageProps = {
 const GPTMessage = ({ message }: GPTMessageProps) => {
   return (
     <m.div
-      initial={{ opacity: 0, x: 100 }}
+      initial={{ opacity: 0, x: (message.role === "assistant" ? 1 : -1) * 100 }}
       animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: (message.role === "assistant" ? 1 : -1) * 100 }}
       className={cn(
-        "flex flex-row gap-1.5 w-auto max-w-[66vw] px-3 py-1.5 rounded-xl shadow-md",
+        "flex flex-row gap-1.5 w-auto h-auto max-w-[66vw] px-3 py-1.5 rounded-xl shadow-md",
         message.role === "user"
           ? "bg-primary text-primary-foreground self-start"
           : "border-2 bg-background self-end"

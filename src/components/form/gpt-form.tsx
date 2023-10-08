@@ -4,11 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
-import ButtonReset from "./reset-button";
 
 import { useTranslation } from "react-i18next";
 import { TMessage, TPrompt, gptSchema } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 import GPTFormStep1 from "./gpt-form-step-1";
 const GPTFormStep2 = React.lazy(() => import("./gpt-form-step-2"));
@@ -18,9 +16,10 @@ const GPTFormStep4 = React.lazy(() => import("./gpt-form-step-4"));
 type GPTFormProps = {
   setQuery: React.Dispatch<React.SetStateAction<TPrompt>>;
   setMessages: React.Dispatch<React.SetStateAction<TMessage[]>>;
+  children: React.ReactNode;
 };
 
-function GPTForm({ setQuery, setMessages }: GPTFormProps) {
+function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
   const [step, setStep] = React.useState(1);
   const [submitted, setSubmitted] = React.useState(false);
 
@@ -63,7 +62,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
         role: "user",
       },
     ]);
-    console.log(values);
+    // console.log(values);
     form.resetField("prompt");
     // form.resetField("temperature");
   }
@@ -140,10 +139,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             >
               {t("back")}
             </Button>
-            <ButtonReset
-              className={cn(!submitted && "hidden")}
-              setMessages={setMessages}
-            />
+            {submitted && step === 4 && children}
           </div>
         </GPTFormStep4>
       </form>

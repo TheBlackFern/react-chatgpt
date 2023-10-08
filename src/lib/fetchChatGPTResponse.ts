@@ -1,24 +1,23 @@
 import { TMessage, TModel } from "./types";
 
-const CONTEXT = [
-  {
-    role: "system",
-    content: "I am a student making research using chatgpt",
-  },
-];
-
 export async function fetchChatGPTResponse(
   model: TModel,
   secret: string,
-  context: string,
-  messages: TMessage[]
+  messages: TMessage[],
+  context?: string
 ) {
-  console.log(messages);
-  const finalContext = context || CONTEXT;
+  // console.log(messages);
+
+  const CONTEXT = [
+    {
+      role: "system",
+      content: context || "I am a student making research using chatgpt",
+    },
+  ];
 
   const apiRequestBody = {
     model: model,
-    messages: [...finalContext, ...messages],
+    messages: [...CONTEXT, ...messages],
     temperature: 0.7,
   };
 

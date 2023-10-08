@@ -1,12 +1,13 @@
 import * as React from "react";
 import { m } from "framer-motion";
-import { GPTResponse, TMessage, TModel, TPrompt } from "@/lib/types";
-import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
-import { useQuery } from "@tanstack/react-query";
 import ScrollButton from "./messages/scroll-button";
-import { Toaster } from "./ui/toaster";
-import { useToast } from "./ui/use-toast";
+import ButtonReset from "./form/reset-button";
+
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { useToast } from "./ui/use-toast";
+import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
+import { GPTResponse, TMessage, TModel, TPrompt } from "@/lib/types";
 
 const GPTForm = React.lazy(() => import("./form/gpt-form"));
 const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
@@ -28,8 +29,9 @@ const GPTContainer = () => {
   const { isFetching, error, data } = useQuery<GPTResponse, Error>({
     queryKey: ["test", query.prompt],
     queryFn: () =>
-      fetchChatGPTResponse(query.model, query.secret, query.context, messages),
+      fetchChatGPTResponse(query.model, query.secret, messages, query.context),
     enabled: messages.length > 0,
+    retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
@@ -55,16 +57,16 @@ const GPTContainer = () => {
 
   React.useLayoutEffect(() => {
     if (messagesRef.current) {
-      setTranslationHeight(messagesRef.current.offsetHeight);
+      setTranslationHeight(messagesRef.current.clientHeight);
       // messagesRef.current.scrollIntoView();
     }
-  }, [messages]);
+  }, [messages, error]);
 
-  React.useEffect(() => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+  // React.useEffect(() => {
+  //   if (formRef.current) {
+  //     formRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [messages]);
 
   React.useEffect(() => {
     function handleWindowResize() {
@@ -109,9 +111,13 @@ const GPTContainer = () => {
           ease: "easeInOut",
         }}
       >
-        <GPTForm setQuery={setQuery} setMessages={setMessages} />
+        <GPTForm setQuery={setQuery} setMessages={setMessages}>
+          <ButtonReset
+            setMessages={setMessages}
+            setTranslationHeight={setTranslationHeight}
+          />
+        </GPTForm>
       </m.div>
-      <Toaster />
     </div>
   );
 };

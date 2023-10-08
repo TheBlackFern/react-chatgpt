@@ -5,11 +5,7 @@ const modelSchema = z.union([z.literal("gpt-3.5-turbo"), z.literal("gpt-4")]);
 export const gptSchema = z.object({
   secret: z.string().min(10),
   model: modelSchema.default("gpt-4"),
-  context: z
-    .string()
-    .min(10)
-    .optional()
-    .default("I am a student using ChatGPT for research"),
+  context: z.string().optional(),
   temperature: z.number().min(0.2).max(1.0).default(0.7),
   prompt: z.string().min(10),
 });
