@@ -2,6 +2,13 @@
   "next": "Next",
   "back": "Back",
   "submit": "Submit",
+  "reset": {
+    "label": "Reset",
+    "title": "Are you sure?",
+    "description": "This will reset the entire chat, all messages will be lost.",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
   "step1": {
     "heading": "Step 1: Provide a Secret",
     "title": "Prompt",
