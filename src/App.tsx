@@ -1,10 +1,11 @@
 import * as React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import GPTContainer from "@/components/gpt-container";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ThemeToggle } from "./components/theme/theme-toggle";
 import { LanguageToggle } from "./components/theme/language-toggle";
 import { LazyMotion, domAnimation } from "framer-motion";
+import { Toaster } from "./components/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
           <LazyMotion features={domAnimation}>
             <GPTContainer />
           </LazyMotion>
+          <Toaster />
         </QueryClientProvider>
       </ThemeProvider>
     </React.Suspense>
