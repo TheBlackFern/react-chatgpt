@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { m } from "framer-motion";
 import {
   FormControl,
@@ -8,7 +7,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { UseFormReturn } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -17,27 +15,15 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useTranslation } from "react-i18next";
-
-type GPTFormStep2Props = {
-  step: number;
-  form: UseFormReturn<{
-    secret: string;
-    model: "gpt-3.5-turbo" | "gpt-4";
-    temperature: number;
-    prompt: string;
-  }>;
-  children: React.ReactNode;
-};
+import { GPTFormStepProps } from "./gpt-form-step-1";
 
 const CURRENT_STEP = 2;
 
-const GPTFormStep2 = ({ step, form, children }: GPTFormStep2Props) => {
+const GPTFormStep2 = ({ step, form, children }: GPTFormStepProps) => {
   const { t } = useTranslation(["form"]);
   return (
     <m.div
-      className={cn("absolute p-1 top-0 left-0 right-0", {
-        "pointer-events-none": step !== CURRENT_STEP,
-      })}
+      className="absolute p-1 top-0 left-0 right-0"
       animate={{
         translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}

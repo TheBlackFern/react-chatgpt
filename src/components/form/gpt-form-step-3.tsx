@@ -7,24 +7,17 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import { useTranslation } from "react-i18next";
-import { UseFormReturn } from "react-hook-form";
-import { TPrompt } from "@/lib/types";
+import { GPTFormStepProps } from "./gpt-form-step-1";
 
-export type GPTFormStepProps = {
-  step: number;
-  form: UseFormReturn<TPrompt>;
-  children: React.ReactNode;
-};
+const CURRENT_STEP = 3;
 
-const CURRENT_STEP = 1;
-
-const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
+const GPTFormStep3 = ({ step, form, children }: GPTFormStepProps) => {
   const { t } = useTranslation(["form"]);
   return (
     <m.div
-      className="p-1"
+      className="flex absolute p-1 left-0 right-0 top-0 flex-col"
       animate={{
         translateX: `${-(step - CURRENT_STEP) * 400}px`,
       }}
@@ -36,20 +29,20 @@ const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
       }}
     >
       <h1 className="font-medium text-medium text-xl mb-3">
-        {t("step1.heading")}
+        {t("step3.heading")}
       </h1>
       <FormField
         control={form.control}
-        name="secret"
+        name="context"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-md">{t("step1.title")}</FormLabel>
-            <FormDescription>{t("step1.description")}</FormDescription>
+            <FormLabel className="text-md">{t("step3.title")}</FormLabel>
+            <FormDescription>{t("step3.description")}</FormDescription>
             <FormControl>
-              <Input
+              <Textarea
                 {...field}
                 data-testid="form-input"
-                placeholder="sk-..."
+                placeholder={t("step3.placeholder")}
                 disabled={step !== CURRENT_STEP}
               />
             </FormControl>
@@ -62,4 +55,4 @@ const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
   );
 };
 
-export default GPTFormStep1;
+export default GPTFormStep3;

@@ -1,6 +1,4 @@
-import * as React from "react";
 import { AnimatePresence, m } from "framer-motion";
-import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
   FormControl,
@@ -12,27 +10,16 @@ import {
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
 import { Slider } from "../ui/slider";
+import { GPTFormStepProps } from "./gpt-form-step-1";
 
-type GPTFormStep3Props = {
-  step: number;
-  form: UseFormReturn<{
-    secret: string;
-    model: "gpt-3.5-turbo" | "gpt-4";
-    temperature: number;
-    prompt: string;
-  }>;
-  submitted: boolean;
-  children: React.ReactNode;
-};
+const CURRENT_STEP = 4;
 
-const CURRENT_STEP = 3;
-
-const GPTFormStep3 = ({
+const GPTFormStep4 = ({
   step,
   form,
   submitted,
   children,
-}: GPTFormStep3Props) => {
+}: GPTFormStepProps & { submitted: boolean }) => {
   const { t } = useTranslation(["form"]);
   const tempComment = (val: number) => {
     if (val < 0.4) return t("degree.bland");
@@ -61,7 +48,7 @@ const GPTFormStep3 = ({
             exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
             transition={{ duration: 1, delay: 1 }}
           >
-            <h1 className="font-medium text-xl">{t("step3.heading")}</h1>
+            <h1 className="font-medium text-xl">{t("step4.heading")}</h1>
           </m.div>
         )}
       </AnimatePresence>
@@ -71,7 +58,7 @@ const GPTFormStep3 = ({
         render={({ field }) => (
           <FormItem className="space-y-0">
             <FormLabel className="text-md block mb-1.5">
-              {t("step3.title1")}
+              {t("step4.title1")}
             </FormLabel>
             <AnimatePresence>
               {!submitted && (
@@ -84,7 +71,7 @@ const GPTFormStep3 = ({
                   exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
                   transition={{ duration: 1, delay: 1 }}
                 >
-                  <FormDescription>{t("step3.description1")}</FormDescription>
+                  <FormDescription>{t("step4.description1")}</FormDescription>
                 </m.div>
               )}
             </AnimatePresence>
@@ -92,7 +79,7 @@ const GPTFormStep3 = ({
               <Textarea
                 data-testid="form-textarea"
                 rows={2}
-                placeholder={t("step3.placeholder")}
+                placeholder={t("step4.placeholder")}
                 {...field}
                 disabled={step !== CURRENT_STEP}
               />
@@ -107,7 +94,7 @@ const GPTFormStep3 = ({
         render={({ field }) => (
           <FormItem className="mt-3 space-y-0">
             <FormLabel className="text-md block mb-1.5">
-              {t("step3.title2")}
+              {t("step4.title2")}
             </FormLabel>
             <AnimatePresence>
               {!submitted && (
@@ -124,7 +111,7 @@ const GPTFormStep3 = ({
                   }}
                   transition={{ duration: 1, delay: 1 }}
                 >
-                  <FormDescription>{t("step3.description2")}</FormDescription>
+                  <FormDescription>{t("step4.description2")}</FormDescription>
                 </m.div>
               )}
             </AnimatePresence>
@@ -154,4 +141,4 @@ const GPTFormStep3 = ({
   );
 };
 
-export default GPTFormStep3;
+export default GPTFormStep4;

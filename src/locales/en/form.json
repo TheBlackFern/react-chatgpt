@@ -14,7 +14,13 @@
     "description": "This is the model that will be used to run the query."
   },
   "step3": {
-    "heading": "Step 3: Chat Away!",
+    "heading": "Step 3 (optional): Set Context",
+    "title": "Context",
+    "description": "A set of instructions that shape every generated response.",
+    "placeholder": "Set of instructions..."
+  },
+  "step4": {
+    "heading": "Step 4: Chat Away!",
     "title1": "Prompt",
     "description1": "The actual prompt for the AI.",
     "placeholder": "Write something...",

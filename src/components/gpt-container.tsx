@@ -1,6 +1,6 @@
 import * as React from "react";
 import { m } from "framer-motion";
-import { GPTResponse, TMessage, TModel } from "@/lib/types";
+import { GPTResponse, TMessage, TModel, TPrompt } from "@/lib/types";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
 import { useQuery } from "@tanstack/react-query";
 import ScrollButton from "./messages/scroll-button";
@@ -14,6 +14,7 @@ const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
 const initialQuery = {
   secret: "",
   model: "gpt-4" as TModel,
+  context: "I am a student using ChatGPT for research",
   prompt: "",
   temperature: 0.7,
 };
@@ -23,10 +24,11 @@ const GPTContainer = () => {
   const formRef = React.useRef<HTMLDivElement | null>(null);
   const [translationHeight, setTranslationHeight] = React.useState(0);
   const [messages, setMessages] = React.useState<TMessage[]>([]);
-  const [query, setQuery] = React.useState<typeof initialQuery>(initialQuery);
+  const [query, setQuery] = React.useState<TPrompt>(initialQuery);
   const { isFetching, error, data } = useQuery<GPTResponse, Error>({
     queryKey: ["test", query.prompt],
-    queryFn: () => fetchChatGPTResponse(query.model, query.secret, messages),
+    queryFn: () =>
+      fetchChatGPTResponse(query.model, query.secret, query.context, messages),
     enabled: messages.length > 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,

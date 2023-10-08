@@ -6,21 +6,15 @@ import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
 
 import { useTranslation } from "react-i18next";
-import { TMessage, TModel, gptSchema } from "@/lib/types";
+import { TMessage, TPrompt, gptSchema } from "@/lib/types";
 
 import GPTFormStep1 from "./gpt-form-step-1";
 const GPTFormStep2 = React.lazy(() => import("./gpt-form-step-2"));
-const GPTFormStep3 = React.lazy(() => import("./gpt-form-step-4"));
+const GPTFormStep3 = React.lazy(() => import("./gpt-form-step-3"));
+const GPTFormStep4 = React.lazy(() => import("./gpt-form-step-4"));
 
 type GPTFormProps = {
-  setQuery: React.Dispatch<
-    React.SetStateAction<{
-      secret: string;
-      model: TModel;
-      prompt: string;
-      temperature: number;
-    }>
-  >;
+  setQuery: React.Dispatch<React.SetStateAction<TPrompt>>;
   setMessages: React.Dispatch<React.SetStateAction<TMessage[]>>;
 };
 
@@ -56,6 +50,7 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
     setQuery({
       model: values.model,
       secret: values.secret,
+      context: values.context,
       prompt: values.prompt,
       temperature: values.temperature,
     });
@@ -108,10 +103,15 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             </Button>
           </div>
         </GPTFormStep2>
-        <GPTFormStep3 form={form} step={step} submitted={submitted}>
+        <GPTFormStep3 form={form} step={step}>
           <div className="flex gap-3 mt-3">
-            <Button data-testid="submit" type="submit" disabled={step !== 3}>
-              {t("submit")}
+            <Button
+              data-testid="next-step-3"
+              type="button"
+              disabled={step !== 3}
+              onClick={() => setStep((prev) => prev + 1)}
+            >
+              {t("next")}
             </Button>
             <Button
               data-testid="back-step-2"
@@ -124,6 +124,22 @@ function GPTForm({ setQuery, setMessages }: GPTFormProps) {
             </Button>
           </div>
         </GPTFormStep3>
+        <GPTFormStep4 form={form} step={step} submitted={submitted}>
+          <div className="flex gap-3 mt-3">
+            <Button data-testid="submit" type="submit" disabled={step !== 4}>
+              {t("submit")}
+            </Button>
+            <Button
+              data-testid="back-step-3"
+              type="button"
+              variant={"ghost"}
+              onClick={() => setStep((prev) => prev - 1)}
+              disabled={step !== 4}
+            >
+              {t("back")}
+            </Button>
+          </div>
+        </GPTFormStep4>
       </form>
     </Form>
   );

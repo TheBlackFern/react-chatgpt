@@ -10,13 +10,15 @@ const CONTEXT = [
 export async function fetchChatGPTResponse(
   model: TModel,
   secret: string,
+  context: string,
   messages: TMessage[]
 ) {
   console.log(messages);
+  const finalContext = context || CONTEXT;
 
   const apiRequestBody = {
     model: model,
-    messages: [...CONTEXT, ...messages],
+    messages: [...finalContext, ...messages],
     temperature: 0.7,
   };
 
