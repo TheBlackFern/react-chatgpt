@@ -119,6 +119,7 @@ const GPTContainer = () => {
       >
         <GPTForm setQuery={setQuery} setMessages={setMessages}>
           <ButtonReset
+            className="ml-auto"
             setMessages={setMessages}
             setTranslationHeight={setTranslationHeight}
           />

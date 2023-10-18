@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TMessage } from "@/lib/types";
 import { useTranslation } from "react-i18next";
+import { X } from "lucide-react";
 
 type ButtonResetProps = {
   submitted?: boolean;
@@ -41,8 +42,13 @@ function ButtonReset({
     >
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button type="button" variant="destructive">
+          <Button
+            className="h-10 w-fit text-destructive"
+            type="button"
+            variant={"ghost"}
+          >
             {t("reset.label")}
+            <X size={18} className="ml-1 mt-1" />
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
