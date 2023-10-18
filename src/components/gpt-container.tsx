@@ -29,7 +29,13 @@ const GPTContainer = () => {
   const { isFetching, error, data } = useQuery<GPTResponse, Error>({
     queryKey: ["test", query.prompt],
     queryFn: () =>
-      fetchChatGPTResponse(query.model, query.secret, messages, query.context),
+      fetchChatGPTResponse(
+        query.model,
+        query.secret,
+        query.temperature,
+        messages,
+        query.context
+      ),
     enabled: messages.length > 0,
     retry: false,
     refetchOnMount: false,

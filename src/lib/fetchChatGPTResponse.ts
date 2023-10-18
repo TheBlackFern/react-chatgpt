@@ -3,6 +3,7 @@ import { TMessage, TModel } from "./types";
 export async function fetchChatGPTResponse(
   model: TModel,
   secret: string,
+  temperature: number,
   messages: TMessage[],
   context?: string
 ) {
@@ -18,7 +19,7 @@ export async function fetchChatGPTResponse(
   const apiRequestBody = {
     model: model,
     messages: [...CONTEXT, ...messages],
-    temperature: 0.7,
+    temperature: temperature,
   };
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
