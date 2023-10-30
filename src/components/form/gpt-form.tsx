@@ -38,12 +38,21 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
   function onFirstNext() {
     form.trigger("secret");
     const secretState = form.getFieldState("secret");
+    // console.log(`${secretState.isDirty} ${!secretState.invalid}`);
+    // TODO: this sometimes fails to correctly check
+    if (secretState.isDirty && !secretState.invalid) {
+      setStep((prev) => prev + 1);
+    }
+  }
+
+  function onThirdNext() {
+    form.trigger("context");
+    const contextState = form.getFieldState("context");
     // console.log(!secretState.isDirty, secretState.invalid);
     // TODO: this sometimes fails to correctly check
-    if (!secretState.isDirty || secretState.invalid) {
-      return;
+    if (!contextState.invalid) {
+      setStep((prev) => prev + 1);
     }
-    setStep((prev) => prev + 1);
   }
 
   function onSubmit(values: zodInfer<typeof gptSchema>) {
@@ -74,7 +83,7 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
       >
         <GPTFormStep1 form={form} step={step}>
           <Button
-            data-testid="next-step-1"
+            data-testid="form-next-1"
             type="button"
             className="flex gap-3 mt-3"
             disabled={step !== 1}
@@ -86,7 +95,7 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
         <GPTFormStep2 form={form} step={step}>
           <div className="flex gap-3 mt-3">
             <Button
-              data-testid="next-step-2"
+              data-testid="form-next-2"
               type="button"
               onClick={() => setStep((prev) => prev + 1)}
               disabled={step !== 2}
@@ -94,7 +103,7 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
               {t("next")}
             </Button>
             <Button
-              data-testid="back-step-2"
+              data-testid="form-back-2"
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
@@ -107,15 +116,15 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
         <GPTFormStep3 form={form} step={step}>
           <div className="flex gap-3 mt-3">
             <Button
-              data-testid="next-step-3"
+              data-testid="form-next-3"
               type="button"
               disabled={step !== 3}
-              onClick={() => setStep((prev) => prev + 1)}
+              onClick={onThirdNext}
             >
               {t("next")}
             </Button>
             <Button
-              data-testid="back-step-2"
+              data-testid="form-back-3"
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
@@ -127,11 +136,15 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
         </GPTFormStep3>
         <GPTFormStep4 form={form} step={step} submitted={submitted}>
           <div className="flex gap-3 mt-3">
-            <Button data-testid="submit" type="submit" disabled={step !== 4}>
+            <Button
+              data-testid="form-submit"
+              type="submit"
+              disabled={step !== 4}
+            >
               {t("submit")}
             </Button>
             <Button
-              data-testid="back-step-3"
+              data-testid="form-back-4"
               type="button"
               variant={"ghost"}
               onClick={() => setStep((prev) => prev - 1)}
