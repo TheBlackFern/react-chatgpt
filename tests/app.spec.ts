@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import type { GPTResponse, GPTChoice } from "../src/lib/types";
 
 test.describe("i18n", () => {
   test.beforeEach(async ({ page }) => {
@@ -88,6 +89,7 @@ test.describe("App", () => {
   });
 
   test("correctly checks step 3 input", async ({ page }) => {
+    await page.getByTestId("form-secret-input").fill("dddddddddddddddddd");
     await page.getByTestId("form-next-1").click();
     await page.getByTestId("form-next-2").click();
     await page.getByTestId("form-context-textarea").fill("s");
@@ -108,117 +110,73 @@ test.describe("App", () => {
     ).toBeVisible();
   });
 
-  // test("", async ({ page }) => {});
-  // test("", async ({ page }) => {});
+  test("correctly renders a good call", async ({ page }) => {
+    await page.route(
+      "https://api.openai.com/v1/chat/completions",
+      async (route) => {
+        const { model, messages } = await JSON.parse(
+          route.request().postData()!
+        );
+        const choices: GPTChoice[] = messages.map((message, index) => ({
+          message,
+          finish_reason: "bruh",
+          index,
+        }));
+        choices.unshift({
+          message: {
+            role: "assistant",
+            content: "This a test from Playwright",
+          },
+          finish_reason: "bruh",
+          index: choices.length,
+        });
+        const json: GPTResponse = {
+          id: "qqqq",
+          object: "fff",
+          created: 123,
+          model,
+          usage: {
+            prompt_tokens: 1,
+            completion_tokens: 1,
+            total_tokens: 1,
+          },
+          choices,
+        };
+        await new Promise((r) => setTimeout(r, 1000));
+        await route.fulfill({ json });
+      }
+    );
+    await page.getByTestId("form-secret-input").fill("sk-12345678910");
+    await page.getByTestId("form-next-1").click();
+    await page.getByTestId("form-next-2").click();
+    await page.getByTestId("form-next-3").click();
+    await page.getByTestId("form-prompt-textarea").fill("say this is a test");
+    await page.getByTestId("form-submit").click();
+    await expect(page.getByText("say this is a test")).toBeVisible();
+    await expect(page.getByText("Typing...")).toBeVisible();
+    await expect(page.getByText("This a test from Playwright")).toBeVisible();
+  });
 
-  // test("has correct i18n", async ({ page }) => {
-  //   await page.getByPlaceholder("sk-...").click();
-  //   await page.getByPlaceholder("sk-...").fill("s");
-  //   await page
-  //     .locator("form div")
-  //     .filter({
-  //       hasText:
-  //         "Step 1: Provide a SecretPromptTo get it, visit the API Keys page of the OpenAI's",
-  //     })
-  //     .getByRole("button")
-  //     .click();
-  //   await page.getByRole("button", { name: "Back" }).first().click();
-  //   await page
-  //     .getByText("String must contain at least 10 character(s)")
-  //     .click();
-  //   await page
-  //     .locator("form div")
-  //     .filter({
-  //       hasText:
-  //         "Step 1: Provide a SecretPromptTo get it, visit the API Keys page of the OpenAI's",
-  //     })
-  //     .getByRole("button")
-  //     .click();
-  //   await page
-  //     .locator("form div")
-  //     .filter({
-  //       hasText:
-  //         "Step 1: Provide a SecretPromptTo get it, visit the API Keys page of the OpenAI's",
-  //     })
-  //     .getByRole("button")
-  //     .click();
-  //   await page.getByPlaceholder("sk-...").click();
-  //   await page.getByPlaceholder("sk-...").fill("sk-11000000");
-  //   await page
-  //     .locator("form div")
-  //     .filter({
-  //       hasText:
-  //         "Step 1: Provide a SecretPromptTo get it, visit the API Keys page of the OpenAI's",
-  //     })
-  //     .getByRole("button")
-  //     .click();
-  //   await page
-  //     .locator("form div")
-  //     .filter({
-  //       hasText:
-  //         "Step 1: Provide a SecretPromptTo get it, visit the API Keys page of the OpenAI's",
-  //     })
-  //     .getByRole("button")
-  //     .click();
-  //   await page.getByLabel("GPT-4").click();
-  //   await page.getByLabel("GPT-4").click();
-  //   await page.getByRole("button", { name: "Back" }).first().click();
-  //   await page
-  //     .locator("form div")
-  //     .filter({
-  //       hasText:
-  //         "Step 1: Provide a SecretPromptTo get it, visit the API Keys page of the OpenAI's",
-  //     })
-  //     .getByRole("button")
-  //     .click();
-  //   await page.getByRole("button", { name: "Next" }).nth(1).click();
-  //   await page.getByRole("heading", { name: "Step 3: Chat Away!" }).click();
-  //   await page.getByPlaceholder("Write something...").click();
-  //   await page
-  //     .getByPlaceholder("Write something...")
-  //     .fill("say this is a test");
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByText("0.55").click();
-  //   await page.getByText("Certain").click();
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByRole("slider").press("ArrowRight");
-  //   await page.getByText("0.90").click();
-  //   await page.getByText("Random", { exact: true }).click();
-  //   await page.getByRole("slider").click();
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByRole("slider").press("ArrowLeft");
-  //   await page.getByText("0.20").click();
-  //   await page.getByText("Bland").click();
-  //   await page.getByRole("button", { name: "Submit" }).click();
-  // });
+  test("correctly renders a bad call", async ({ page }) => {
+    await page.route(
+      "https://api.openai.com/v1/chat/completions",
+      async (route) => {
+        await new Promise((r) => setTimeout(r, 1000));
+        await route.abort("accessdenied");
+      }
+    );
+    await page.getByTestId("form-secret-input").fill("dddddddddddddddddd");
+    await page.getByTestId("form-next-1").click();
+    await page.getByTestId("form-next-2").click();
+    await page.getByTestId("form-next-3").click();
+    await page.getByTestId("form-prompt-textarea").fill("say this is a test");
+    await page.getByTestId("form-submit").click();
+    await expect(page.getByText("say this is a test")).toBeVisible();
+    await expect(page.getByText("Typing...")).toBeVisible();
+    // await expect(
+    //   page.getByText("Your last query resulted in an error. Please, retry.")
+    // ).toBeVisible();
+    await expect(page.getByTestId("toast")).toBeVisible();
+    await expect(page.getByText("Typing...")).not.toBeVisible();
+  });
 });

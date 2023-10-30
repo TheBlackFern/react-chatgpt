@@ -23,7 +23,7 @@ export const gptSchema = z.object({
 export type TModel = z.infer<typeof modelSchema>;
 export type TPrompt = z.infer<typeof gptSchema>;
 
-type GPTChoice = {
+export type GPTChoice = {
   message: {
     role: string;
     content: string;
