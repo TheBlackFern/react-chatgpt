@@ -43,6 +43,7 @@ const GPTFormStep2 = ({ step, form, children }: GPTFormStepProps) => {
             <FormLabel className="text-md">{t("step2.title")}</FormLabel>
             <FormDescription>{t("step2.description")}</FormDescription>
             <Select
+              data-testid="form-model-select"
               onValueChange={field.onChange}
               defaultValue={field.value}
               disabled={step !== CURRENT_STEP}

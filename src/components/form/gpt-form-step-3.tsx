@@ -41,7 +41,7 @@ const GPTFormStep3 = ({ step, form, children }: GPTFormStepProps) => {
             <FormControl>
               <Textarea
                 {...field}
-                data-testid="form-input"
+                data-testid="form-context-textarea"
                 placeholder={t("step3.placeholder")}
                 disabled={step !== CURRENT_STEP}
               />

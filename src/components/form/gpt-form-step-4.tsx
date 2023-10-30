@@ -77,7 +77,7 @@ const GPTFormStep4 = ({
             </AnimatePresence>
             <FormControl>
               <Textarea
-                data-testid="form-textarea"
+                data-testid="form-prompt-textarea"
                 rows={2}
                 placeholder={t("step4.placeholder")}
                 {...field}
@@ -118,7 +118,7 @@ const GPTFormStep4 = ({
             <div className="flex flex-row gap-3 w-auto">
               <FormControl className="w-48">
                 <Slider
-                  data-testid="form-slider"
+                  data-testid="form-temperature-slider"
                   disabled={step !== CURRENT_STEP}
                   min={0.2}
                   max={1.0}

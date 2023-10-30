@@ -48,7 +48,7 @@ const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
             <FormControl>
               <Input
                 {...field}
-                data-testid="form-input"
+                data-testid="form-secret-input"
                 placeholder="sk-..."
                 disabled={step !== CURRENT_STEP}
               />
