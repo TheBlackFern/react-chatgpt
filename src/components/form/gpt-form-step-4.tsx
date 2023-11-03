@@ -129,8 +129,15 @@ const GPTFormStep4 = ({
                   }}
                 />
               </FormControl>
-              <span className="font-medium w-8">{field.value.toFixed(2)}</span>
-              <span className="font-thin">{tempComment(field.value)}</span>
+              <span
+                data-testid="form-temperature-value"
+                className="font-medium w-8"
+              >
+                {field.value.toFixed(2)}
+              </span>
+              <span data-testid="form-temperature-text" className="font-thin">
+                {tempComment(field.value)}
+              </span>
             </div>
             <FormMessage />
           </FormItem>
