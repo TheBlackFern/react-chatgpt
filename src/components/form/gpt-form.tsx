@@ -20,10 +20,9 @@ type GPTFormProps = {
 };
 
 function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
+  const { t } = useTranslation(["form"]);
   const [step, setStep] = React.useState(1);
   const [submitted, setSubmitted] = React.useState(false);
-
-  const { t } = useTranslation(["form"]);
 
   const form = useForm<zodInfer<typeof gptSchema>>({
     resolver: zodResolver(gptSchema),
@@ -35,21 +34,18 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
     },
   });
 
-  function onFirstNext() {
-    form.trigger("secret");
+  async function onFirstNext() {
+    await form.trigger("secret");
     const secretState = form.getFieldState("secret");
-    // console.log(`${secretState.isDirty} ${!secretState.invalid}`);
-    // TODO: this sometimes fails to correctly check
-    if (secretState.isDirty && !secretState.invalid) {
+    const isSecretValid = secretState.isDirty && !secretState.invalid;
+    if (isSecretValid) {
       setStep((prev) => prev + 1);
     }
   }
 
-  function onThirdNext() {
-    form.trigger("context");
+  async function onThirdNext() {
+    await form.trigger("context");
     const contextState = form.getFieldState("context");
-    // console.log(!secretState.isDirty, secretState.invalid);
-    // TODO: this sometimes fails to correctly check
     if (!contextState.invalid) {
       setStep((prev) => prev + 1);
     }
