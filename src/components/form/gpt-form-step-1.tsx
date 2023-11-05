@@ -1,11 +1,4 @@
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import * as Form from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -31,23 +24,27 @@ const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
       <h1 className="font-medium text-medium text-xl mb-3">
         {t("step1.heading")}
       </h1>
-      <FormField
+      <Form.FormField
         control={form.control}
         name="secret"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-md">{t("step1.title")}</FormLabel>
-            <FormDescription>{t("step1.description")}</FormDescription>
-            <FormControl>
+          <Form.FormItem>
+            <Form.FormLabel className="text-md">
+              {t("step1.title")}
+            </Form.FormLabel>
+            <Form.FormDescription>
+              {t("step1.description")}
+            </Form.FormDescription>
+            <Form.FormControl>
               <Input
                 {...field}
                 data-testid="form-secret-input"
                 placeholder="sk-..."
                 disabled={step !== CURRENT_STEP}
               />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
+            </Form.FormControl>
+            <Form.FormMessage />
+          </Form.FormItem>
         )}
       />
       {children}

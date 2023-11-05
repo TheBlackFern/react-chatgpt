@@ -1,18 +1,5 @@
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import * as Form from "@/components/ui/form";
+import * as Select from "@/components/ui/select";
 import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import type { GPTFormStepProps } from "@/@types";
@@ -35,41 +22,45 @@ const GPTFormStep2 = ({ step, form, children }: GPTFormStepProps) => {
       }}
     >
       <h1 className="font-medium text-xl mb-3">{t("step2.heading")}</h1>
-      <FormField
+      <Form.FormField
         control={form.control}
         name="model"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel className="text-md">{t("step2.title")}</FormLabel>
-            <FormDescription>{t("step2.description")}</FormDescription>
-            <Select
+          <Form.FormItem>
+            <Form.FormLabel className="text-md">
+              {t("step2.title")}
+            </Form.FormLabel>
+            <Form.FormDescription>
+              {t("step2.description")}
+            </Form.FormDescription>
+            <Select.Select
               data-testid="form-model-select"
               onValueChange={field.onChange}
               defaultValue={field.value}
               disabled={step !== CURRENT_STEP}
             >
-              <FormControl>
-                <SelectTrigger data-testid="form-model-select-button">
-                  <SelectValue placeholder={t("step2.placeholder")} />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectItem
+              <Form.FormControl>
+                <Select.SelectTrigger data-testid="form-model-select-button">
+                  <Select.SelectValue placeholder={t("step2.placeholder")} />
+                </Select.SelectTrigger>
+              </Form.FormControl>
+              <Select.SelectContent>
+                <Select.SelectItem
                   data-testid="form-model-select-button-gpt-3.5"
                   value="gpt-3.5-turbo"
                 >
                   GPT-3.5-Turbo
-                </SelectItem>
-                <SelectItem
+                </Select.SelectItem>
+                <Select.SelectItem
                   data-testid="form-model-select-button-gpt-4"
                   value="gpt-4"
                 >
                   GPT-4
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
+                </Select.SelectItem>
+              </Select.SelectContent>
+            </Select.Select>
+            <Form.FormMessage />
+          </Form.FormItem>
         )}
       />
       {children}

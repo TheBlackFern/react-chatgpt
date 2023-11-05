@@ -1,11 +1,4 @@
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import * as Form from "@/components/ui/form";
 import { Textarea } from "../ui/textarea";
 import { Slider } from "../ui/slider";
 import { AnimatePresence, m } from "framer-motion";
@@ -52,14 +45,14 @@ const GPTFormStep4 = ({
           </m.div>
         )}
       </AnimatePresence>
-      <FormField
+      <Form.FormField
         control={form.control}
         name="prompt"
         render={({ field }) => (
-          <FormItem className="space-y-0">
-            <FormLabel className="text-md block mb-1.5">
+          <Form.FormItem className="space-y-0">
+            <Form.FormLabel className="text-md block mb-1.5">
               {t("step4.title1")}
-            </FormLabel>
+            </Form.FormLabel>
             <AnimatePresence>
               {!submitted && (
                 <m.div
@@ -71,11 +64,13 @@ const GPTFormStep4 = ({
                   exit={{ opacity: 0, height: 0, marginBottom: "0px" }}
                   transition={{ duration: 1, delay: 1 }}
                 >
-                  <FormDescription>{t("step4.description1")}</FormDescription>
+                  <Form.FormDescription>
+                    {t("step4.description1")}
+                  </Form.FormDescription>
                 </m.div>
               )}
             </AnimatePresence>
-            <FormControl>
+            <Form.FormControl>
               <Textarea
                 data-testid="form-prompt-textarea"
                 rows={2}
@@ -83,19 +78,19 @@ const GPTFormStep4 = ({
                 {...field}
                 disabled={step !== CURRENT_STEP}
               />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
+            </Form.FormControl>
+            <Form.FormMessage />
+          </Form.FormItem>
         )}
       />
-      <FormField
+      <Form.FormField
         control={form.control}
         name="temperature"
         render={({ field }) => (
-          <FormItem className="mt-3 space-y-0">
-            <FormLabel className="text-md block mb-1.5">
+          <Form.FormItem className="mt-3 space-y-0">
+            <Form.FormLabel className="text-md block mb-1.5">
               {t("step4.title2")}
-            </FormLabel>
+            </Form.FormLabel>
             <AnimatePresence>
               {!submitted && (
                 <m.div
@@ -111,12 +106,14 @@ const GPTFormStep4 = ({
                   }}
                   transition={{ duration: 1, delay: 1 }}
                 >
-                  <FormDescription>{t("step4.description2")}</FormDescription>
+                  <Form.FormDescription>
+                    {t("step4.description2")}
+                  </Form.FormDescription>
                 </m.div>
               )}
             </AnimatePresence>
             <div className="flex flex-row gap-3 w-auto">
-              <FormControl className="w-48">
+              <Form.FormControl className="w-48">
                 <Slider
                   data-testid="form-temperature-slider"
                   disabled={step !== CURRENT_STEP}
@@ -128,7 +125,7 @@ const GPTFormStep4 = ({
                     field.onChange(vals[0]);
                   }}
                 />
-              </FormControl>
+              </Form.FormControl>
               <span
                 data-testid="form-temperature-value"
                 className="font-medium w-8"
@@ -139,8 +136,8 @@ const GPTFormStep4 = ({
                 {tempComment(field.value)}
               </span>
             </div>
-            <FormMessage />
-          </FormItem>
+            <Form.FormMessage />
+          </Form.FormItem>
         )}
       />
       {children}

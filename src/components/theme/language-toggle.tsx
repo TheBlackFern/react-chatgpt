@@ -1,41 +1,36 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import * as DropdownMenu from "@/components/ui/dropdown-menu";
 import i18n from "@/i18n";
 
 export function LanguageToggle() {
   const [lang, setLang] = React.useState(i18n.resolvedLanguage);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <DropdownMenu.DropdownMenu>
+      <DropdownMenu.DropdownMenuTrigger asChild>
         <Button data-testid="lang-switch" variant="outline" size="icon">
           {lang?.toLocaleUpperCase()}
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
+      </DropdownMenu.DropdownMenuTrigger>
+      <DropdownMenu.DropdownMenuContent align="end">
+        <DropdownMenu.DropdownMenuItem
           onClick={() => {
             i18n.changeLanguage("en");
             setLang("en");
           }}
         >
           English
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </DropdownMenu.DropdownMenuItem>
+        <DropdownMenu.DropdownMenuItem
           onClick={() => {
             i18n.changeLanguage("ru");
             setLang("ru");
           }}
         >
           Русский
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </DropdownMenu.DropdownMenuItem>
+      </DropdownMenu.DropdownMenuContent>
+    </DropdownMenu.DropdownMenu>
   );
 }
