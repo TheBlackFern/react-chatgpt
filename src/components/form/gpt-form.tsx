@@ -9,21 +9,20 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { infer as zodInfer } from "zod";
-import { type TMessage, type TPrompt, gptSchema } from "@/@types";
+import { type TPrompt, gptSchema } from "@/@types";
 
 type GPTFormProps = {
-  setQuery: React.Dispatch<React.SetStateAction<TPrompt>>;
-  setMessages: React.Dispatch<React.SetStateAction<TMessage[]>>;
+  makeQuery(prompt: TPrompt): void;
+  addMessage(messageText: string): void;
   children: React.ReactNode;
 };
 
-function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
+function GPTForm({ makeQuery, addMessage, children }: GPTFormProps) {
   const { t } = useTranslation(["form"]);
   const [step, setStep] = React.useState(1);
   const [submitted, setSubmitted] = React.useState(false);
 
-  const form = useForm<zodInfer<typeof gptSchema>>({
+  const form = useForm<TPrompt>({
     resolver: zodResolver(gptSchema),
     defaultValues: {
       secret: "",
@@ -50,22 +49,10 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
     }
   }
 
-  function onSubmit(values: zodInfer<typeof gptSchema>) {
+  function onSubmit(values: TPrompt) {
     setSubmitted(true);
-    setQuery({
-      model: values.model,
-      secret: values.secret,
-      context: values.context,
-      prompt: values.prompt,
-      temperature: values.temperature,
-    });
-    setMessages((prev) => [
-      ...prev,
-      {
-        content: values.prompt,
-        role: "user",
-      },
-    ]);
+    makeQuery(values);
+    addMessage(values.prompt);
     form.resetField("prompt");
   }
   return (

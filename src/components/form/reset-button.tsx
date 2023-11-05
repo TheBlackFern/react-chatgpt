@@ -13,16 +13,15 @@ import { Button } from "@/components/ui/button";
 import { m } from "framer-motion";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import type { TMessage } from "@/@types";
 
 type ButtonResetProps = {
   submitted?: boolean;
-  setMessages: React.Dispatch<React.SetStateAction<TMessage[]>>;
+  resetMessages(): void;
   resetTranslationHeight(): void;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 function ButtonReset({
-  setMessages,
+  resetMessages,
   resetTranslationHeight,
   className,
 }: ButtonResetProps) {
@@ -30,7 +29,7 @@ function ButtonReset({
 
   const handleReset = () => {
     resetTranslationHeight();
-    setMessages([]);
+    resetMessages();
   };
   return (
     <m.div
