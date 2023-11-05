@@ -3,6 +3,7 @@ import { m } from "framer-motion";
 import ScrollButton from "@/components/messages/scroll-button";
 import ButtonReset from "@/components/form/reset-button";
 
+import { useComponentHeight } from "@/hooks/useComponentHeight";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,9 +22,6 @@ const initialQuery = {
 };
 
 const GPTContainer = () => {
-  const messagesRef = React.useRef<HTMLDivElement | null>(null);
-  const formRef = React.useRef<HTMLDivElement | null>(null);
-  const [translationHeight, setTranslationHeight] = React.useState(0);
   const [messages, setMessages] = React.useState<TMessage[]>([]);
   const [query, setQuery] = React.useState<TPrompt>(initialQuery);
   const { isFetching, error, data } = useQuery<GPTResponse, Error>({
@@ -43,7 +41,6 @@ const GPTContainer = () => {
   });
   const { toast } = useToast();
   const { t } = useTranslation(["messages"]);
-
   React.useEffect(() => {
     if (
       data &&
@@ -61,25 +58,6 @@ const GPTContainer = () => {
     }
   }, [data]);
 
-  React.useLayoutEffect(() => {
-    if (messagesRef.current) {
-      setTranslationHeight(messagesRef.current.clientHeight);
-    }
-  }, [messages, error]);
-
-  React.useEffect(() => {
-    function handleWindowResize() {
-      if (messagesRef.current) {
-        setTranslationHeight(messagesRef.current.clientHeight);
-      }
-    }
-    window.addEventListener("resize", handleWindowResize);
-
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
-
   React.useEffect(() => {
     if (error) {
       toast({
@@ -88,6 +66,14 @@ const GPTContainer = () => {
       });
     }
   }, [error]);
+
+  const formRef = React.useRef<HTMLDivElement | null>(null);
+
+  const messagesRef = React.useRef<HTMLDivElement | null>(null);
+  const { translationHeight, resetTranslationHeight } = useComponentHeight(
+    messagesRef,
+    [messages, error]
+  );
 
   return (
     <div className="flex relative h-auto w-full items-center flex-col justify-start p-7">
@@ -114,7 +100,7 @@ const GPTContainer = () => {
           <ButtonReset
             className="ml-auto"
             setMessages={setMessages}
-            setTranslationHeight={setTranslationHeight}
+            resetTranslationHeight={resetTranslationHeight}
           />
         </GPTForm>
       </m.div>

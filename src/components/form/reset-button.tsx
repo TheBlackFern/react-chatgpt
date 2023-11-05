@@ -18,19 +18,18 @@ import type { TMessage } from "@/@types";
 type ButtonResetProps = {
   submitted?: boolean;
   setMessages: React.Dispatch<React.SetStateAction<TMessage[]>>;
-  setTranslationHeight: React.Dispatch<React.SetStateAction<number>>;
+  resetTranslationHeight(): void;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 function ButtonReset({
   setMessages,
-  setTranslationHeight,
-
+  resetTranslationHeight,
   className,
 }: ButtonResetProps) {
   const { t } = useTranslation(["form"]);
 
   const handleReset = () => {
-    setTranslationHeight(0);
+    resetTranslationHeight();
     setMessages([]);
   };
   return (
