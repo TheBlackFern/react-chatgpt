@@ -411,4 +411,55 @@ test.describe("App form", () => {
     await scrollDownButton.click();
     await expect(page.getByTestId("form-prompt-textarea")).toBeInViewport();
   });
+
+  test("properly resets the form", async ({ page }) => {
+    const TEST_TEXT = "test message";
+    await page.route(
+      "https://api.openai.com/v1/chat/completions",
+      async (route) => {
+        const { model, messages } = await JSON.parse(
+          route.request().postData()!
+        );
+        const choices: GPTChoice[] = messages.map((message, index) => ({
+          message,
+          finish_reason: "bruh",
+          index,
+        }));
+        choices.unshift({
+          message: {
+            role: "assistant",
+            content: TEST_TEXT,
+          },
+          finish_reason: "bruh",
+          index: choices.length,
+        });
+        const json: GPTResponse = {
+          id: "qqqq",
+          object: "fff",
+          created: 123,
+          model,
+          usage: {
+            prompt_tokens: 1,
+            completion_tokens: 1,
+            total_tokens: 1,
+          },
+          choices,
+        };
+        await new Promise((r) => setTimeout(r, 1000));
+        await route.fulfill({ json });
+      }
+    );
+    const resetButton = page.getByTestId("reset-button");
+    await expect(resetButton).not.toBeVisible();
+
+    await page.getByTestId("form-submit").click();
+    await expect(resetButton).toBeVisible();
+    await expect(page.getByText(TEST_TEXT)).toBeVisible();
+
+    await resetButton.click();
+    await page.getByTestId("reset-confirm-button").click();
+
+    await expect(page.getByText(TEST_TEXT)).not.toBeVisible();
+    await expect(page.getByText("say this is a test")).not.toBeVisible();
+  });
 });

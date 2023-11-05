@@ -87,6 +87,7 @@ function GPTForm({ makeQuery, addMessage, reset }: GPTFormProps) {
           const currentStep = index + 1;
           return (
             <Component
+              key={index}
               step={step}
               form={form}
               submitted={submitted}

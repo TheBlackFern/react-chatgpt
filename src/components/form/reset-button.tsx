@@ -32,6 +32,7 @@ function ResetButton({ reset, className }: ResetButtonProps) {
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button
+            data-testid="reset-button"
             className="h-10 w-fit text-destructive"
             type="button"
             variant={"ghost"}
@@ -49,7 +50,10 @@ function ResetButton({ reset, className }: ResetButtonProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("reset.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={reset}>
+            <AlertDialogAction
+              data-testid="reset-confirm-button"
+              onClick={reset}
+            >
               {t("reset.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
