@@ -49,13 +49,23 @@ const GPTFormStep2 = ({ step, form, children }: GPTFormStepProps) => {
               disabled={step !== CURRENT_STEP}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger data-testid="form-model-select-button">
                   <SelectValue placeholder={t("step2.placeholder")} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="gpt-3.5-turbo">GPT-3.5-Turbo</SelectItem>
-                <SelectItem value="gpt-4">GPT-4</SelectItem>
+                <SelectItem
+                  data-testid="form-model-select-button-gpt-3.5"
+                  value="gpt-3.5-turbo"
+                >
+                  GPT-3.5-Turbo
+                </SelectItem>
+                <SelectItem
+                  data-testid="form-model-select-button-gpt-4"
+                  value="gpt-4"
+                >
+                  GPT-4
+                </SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
