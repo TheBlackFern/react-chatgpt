@@ -14,23 +14,14 @@ import { m } from "framer-motion";
 import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-type ButtonResetProps = {
+type ResetButtonProps = {
   submitted?: boolean;
-  resetMessages(): void;
-  resetTranslationHeight(): void;
+  reset(): void;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-function ButtonReset({
-  resetMessages,
-  resetTranslationHeight,
-  className,
-}: ButtonResetProps) {
+function ResetButton({ reset, className }: ResetButtonProps) {
   const { t } = useTranslation(["form"]);
 
-  const handleReset = () => {
-    resetTranslationHeight();
-    resetMessages();
-  };
   return (
     <m.div
       className={className}
@@ -58,7 +49,7 @@ function ButtonReset({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("reset.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleReset}>
+            <AlertDialogAction onClick={reset}>
               {t("reset.confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -68,4 +59,4 @@ function ButtonReset({
   );
 }
 
-export default ButtonReset;
+export default ResetButton;

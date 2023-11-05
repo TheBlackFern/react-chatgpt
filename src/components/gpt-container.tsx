@@ -1,6 +1,5 @@
 import * as React from "react";
 import ScrollButton from "@/components/messages/scroll-button";
-import ButtonReset from "@/components/form/reset-button";
 import { m } from "framer-motion";
 
 import { useComponentHeight } from "@/hooks/useComponentHeight";
@@ -14,12 +13,16 @@ const GPTContainer = () => {
     useMessages();
 
   const formRef = React.useRef<HTMLDivElement | null>(null);
-
   const messagesRef = React.useRef<HTMLDivElement | null>(null);
   const { translationHeight, resetTranslationHeight } = useComponentHeight(
     messagesRef,
     [messages, error]
   );
+
+  function reset() {
+    resetTranslationHeight();
+    resetMessages();
+  }
 
   return (
     <div className="flex relative h-auto w-full items-center flex-col justify-start p-7">
@@ -42,13 +45,7 @@ const GPTContainer = () => {
           ease: "easeInOut",
         }}
       >
-        <GPTForm makeQuery={makeQuery} addMessage={addMessage}>
-          <ButtonReset
-            className="ml-auto"
-            resetMessages={resetMessages}
-            resetTranslationHeight={resetTranslationHeight}
-          />
-        </GPTForm>
+        <GPTForm makeQuery={makeQuery} addMessage={addMessage} reset={reset} />
       </m.div>
     </div>
   );
