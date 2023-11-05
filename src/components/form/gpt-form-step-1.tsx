@@ -1,4 +1,3 @@
-import { m } from "framer-motion";
 import {
   FormControl,
   FormDescription,
@@ -6,17 +5,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { UseFormReturn } from "react-hook-form";
-import { TPrompt } from "@/lib/types";
-
-export type GPTFormStepProps = {
-  step: number;
-  form: UseFormReturn<TPrompt>;
-  children: React.ReactNode;
-};
+import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 1;
 

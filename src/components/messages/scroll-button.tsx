@@ -1,8 +1,8 @@
 import * as React from "react";
+import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
 import { useInView } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 type ScrollButtonProps = {
   targetRef: React.MutableRefObject<HTMLDivElement | null>;

@@ -1,6 +1,6 @@
 import * as React from "react";
+import { Button } from "@/components/ui/button";
 import { Copy, CopyCheck } from "lucide-react";
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
 type CopyButtonProps = {

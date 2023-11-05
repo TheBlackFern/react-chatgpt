@@ -1,4 +1,4 @@
-import { TMessage, TModel } from "./types";
+import { TMessage, TModel } from "../@types";
 
 export const DEFAULT_CONTEXT = "I am a student making research using chatgpt";
 
@@ -9,9 +9,7 @@ export async function fetchChatGPTResponse(
   messages: TMessage[],
   context?: string
 ) {
-  // console.log(messages);
-
-  const CONTEXT = [
+  const contextMessage = [
     {
       role: "system",
       content: context || DEFAULT_CONTEXT,
@@ -20,7 +18,7 @@ export async function fetchChatGPTResponse(
 
   const apiRequestBody = {
     model: model,
-    messages: [...CONTEXT, ...messages],
+    messages: [...contextMessage, ...messages],
     temperature: temperature,
   };
 

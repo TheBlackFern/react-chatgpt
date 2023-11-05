@@ -1,11 +1,11 @@
 import * as React from "react";
 import GPTContainer from "@/components/gpt-container";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { ThemeToggle } from "./components/theme/theme-toggle";
-import { LanguageToggle } from "./components/theme/language-toggle";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { LanguageToggle } from "@/components/theme/language-toggle";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LazyMotion, domAnimation } from "framer-motion";
-import { Toaster } from "./components/ui/toaster";
 
 const queryClient = new QueryClient();
 

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import i18n from "@/i18n";
-import * as React from "react";
 
 export function LanguageToggle() {
   const [lang, setLang] = React.useState(i18n.resolvedLanguage);

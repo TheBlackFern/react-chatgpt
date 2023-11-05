@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import type { GPTResponse, GPTChoice } from "../src/lib/types";
+import type { GPTResponse, GPTChoice } from "../src/@types";
 import { DEFAULT_CONTEXT } from "../src/lib/fetchChatGPTResponse";
 
 test.describe("App form", () => {

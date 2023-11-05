@@ -1,4 +1,3 @@
-import { m } from "framer-motion";
 import {
   FormControl,
   FormDescription,
@@ -6,10 +5,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Textarea } from "../ui/textarea";
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { GPTFormStepProps } from "./gpt-form-step-1";
+import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 3;
 

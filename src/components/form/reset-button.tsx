@@ -1,4 +1,3 @@
-import { m } from "framer-motion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,9 +10,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { TMessage } from "@/lib/types";
-import { useTranslation } from "react-i18next";
+import { m } from "framer-motion";
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import type { TMessage } from "@/@types";
 
 type ButtonResetProps = {
   submitted?: boolean;

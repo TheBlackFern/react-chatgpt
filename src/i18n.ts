@@ -5,9 +5,6 @@ import { initReactI18next } from "react-i18next";
 import { z } from "zod";
 import { zodI18nMap } from "zod-i18n-map";
 import translationRUzod from "zod-i18n-map/locales/ru/zod.json";
-// import Backend from "i18next-http-backend";
-// import translationRU from "./ru/translation.json";
-// import translationEN from "./en/translation.json";
 
 i18n
   .use(
@@ -28,15 +25,6 @@ i18n
     react: {
       useSuspense: true,
     },
-    // resources: {
-    //   en: {
-    //     translation: translationEN,
-    //   },
-    //   ru: {
-    //     zod: translationRUzod,
-    //     translation: translationRU,
-    //   },
-    // },
   });
 i18n.addResourceBundle("ru", "zod", translationRUzod);
 z.setErrorMap(zodI18nMap);

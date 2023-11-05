@@ -1,17 +1,16 @@
 import * as React from "react";
-import { infer as zodInfer } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
-import { Button } from "../ui/button";
-
-import { useTranslation } from "react-i18next";
-import { TMessage, TPrompt, gptSchema } from "@/lib/types";
-
 import GPTFormStep1 from "./gpt-form-step-1";
 const GPTFormStep2 = React.lazy(() => import("./gpt-form-step-2"));
 const GPTFormStep3 = React.lazy(() => import("./gpt-form-step-3"));
 const GPTFormStep4 = React.lazy(() => import("./gpt-form-step-4"));
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { infer as zodInfer } from "zod";
+import { type TMessage, type TPrompt, gptSchema } from "@/@types";
 
 type GPTFormProps = {
   setQuery: React.Dispatch<React.SetStateAction<TPrompt>>;
@@ -67,9 +66,7 @@ function GPTForm({ setQuery, setMessages, children }: GPTFormProps) {
         role: "user",
       },
     ]);
-    // console.log(values);
     form.resetField("prompt");
-    // form.resetField("temperature");
   }
   return (
     <Form {...form}>

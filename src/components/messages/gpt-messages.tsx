@@ -1,8 +1,8 @@
 import * as React from "react";
-import { TMessage } from "@/lib/types";
-import GPTMessage from "./gpt-message";
+import GPTMessage from "@/components/messages/gpt-message";
 import { AnimatePresence, m } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import type { TMessage } from "@/@types";
 
 type GPTMessagesProps = {
   messages: TMessage[];

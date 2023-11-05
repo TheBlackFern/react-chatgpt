@@ -1,4 +1,5 @@
 import * as z from "zod";
+import type { UseFormReturn } from "react-hook-form";
 
 const modelSchema = z.union([z.literal("gpt-3.5-turbo"), z.literal("gpt-4")]);
 
@@ -48,4 +49,10 @@ export type GPTResponse = {
 export type TMessage = {
   content: string;
   role: "assistant" | "user";
+};
+
+export type GPTFormStepProps = {
+  step: number;
+  form: UseFormReturn<TPrompt>;
+  children: React.ReactNode;
 };

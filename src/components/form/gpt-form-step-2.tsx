@@ -1,4 +1,3 @@
-import { m } from "framer-motion";
 import {
   FormControl,
   FormDescription,
@@ -6,16 +5,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
+import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { GPTFormStepProps } from "./gpt-form-step-1";
+import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 2;
 

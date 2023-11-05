@@ -1,7 +1,7 @@
-import { TMessage } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import CopyButton from "@/components/messages/copy-button";
 import { m } from "framer-motion";
-import CopyButton from "./copy-button";
+import { cn } from "@/lib/utils";
+import type { TMessage } from "@/@types";
 
 type GPTMessageProps = {
   message: TMessage;

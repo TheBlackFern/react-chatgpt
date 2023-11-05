@@ -1,5 +1,3 @@
-import { AnimatePresence, m } from "framer-motion";
-import { useTranslation } from "react-i18next";
 import {
   FormControl,
   FormDescription,
@@ -7,10 +5,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
 import { Textarea } from "../ui/textarea";
 import { Slider } from "../ui/slider";
-import { GPTFormStepProps } from "./gpt-form-step-1";
+import { AnimatePresence, m } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 4;
 
