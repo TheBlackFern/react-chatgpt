@@ -123,7 +123,9 @@ function GPTForm({ makeQuery, addMessage, reset }: GPTFormProps) {
                       {t("back")}
                     </Button>
                   )}
-                  {submitted && isLast && <ResetButton reset={reset} />}
+                  {submitted && isLast && (
+                    <ResetButton className="ml-auto" reset={reset} />
+                  )}
                 </div>
               }
             />
