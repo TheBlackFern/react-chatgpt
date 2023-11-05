@@ -1,5 +1,7 @@
 import { TMessage, TModel } from "./types";
 
+export const DEFAULT_CONTEXT = "I am a student making research using chatgpt";
+
 export async function fetchChatGPTResponse(
   model: TModel,
   secret: string,
@@ -12,7 +14,7 @@ export async function fetchChatGPTResponse(
   const CONTEXT = [
     {
       role: "system",
-      content: context || "I am a student making research using chatgpt",
+      content: context || DEFAULT_CONTEXT,
     },
   ];
 
