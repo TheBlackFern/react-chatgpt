@@ -366,7 +366,7 @@ test.describe("App form", () => {
     await expect(page.getByText("Model: " + "gpt-3.5-turbo")).toBeVisible();
   });
 
-  test("shows the scroll down button when input out of view", async ({
+  test("shows the scroll down button when input out of view, scrolls down on click", async ({
     page,
   }) => {
     await page.route(
