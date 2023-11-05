@@ -5,7 +5,7 @@ import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type ScrollButtonProps = {
-  targetRef: React.MutableRefObject<HTMLDivElement | null>;
+  targetRef: React.MutableRefObject<HTMLElement | null>;
 } & React.HTMLAttributes<HTMLButtonElement>;
 
 const ScrollButton = ({ targetRef, className }: ScrollButtonProps) => {

@@ -1,12 +1,11 @@
 import * as React from "react";
-import ScrollButton from "@/components/messages/scroll-button";
+const GPTForm = React.lazy(() => import("@/components/form/gpt-form"));
+const GPTMessages = React.lazy(
+  () => import("@/components/messages/gpt-messages")
+);
 import { m } from "framer-motion";
-
 import { useComponentHeight } from "@/hooks/useComponentHeight";
 import { useMessages } from "@/hooks/useMessages";
-
-const GPTForm = React.lazy(() => import("./form/gpt-form"));
-const GPTMessages = React.lazy(() => import("./messages/gpt-messages"));
 
 const GPTContainer = () => {
   const { messages, addMessage, resetMessages, isFetching, error, makeQuery } =
@@ -26,12 +25,9 @@ const GPTContainer = () => {
 
   return (
     <div className="flex relative h-auto w-full items-center flex-col justify-start p-7">
-      <ScrollButton
-        targetRef={formRef}
-        className="fixed bottom-3 right-3 md:bottom-8 md:right-8"
-      />
       <GPTMessages
         ref={messagesRef}
+        targetRef={formRef}
         messages={messages}
         isFetching={isFetching}
       />
