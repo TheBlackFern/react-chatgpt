@@ -82,50 +82,52 @@ function GPTForm({ makeQuery, addMessage, reset }: GPTFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative min-h-[400px] mt-1 overflow-x-hidden"
       >
-        {formSteps.map(({ Component, nextFunction }, index) => (
-          <Component
-            step={step}
-            form={form}
-            submitted={submitted}
-            children={
-              <div className="flex gap-3 mt-3">
-                {index !== 3 && (
-                  <Button
-                    data-testid={`form-next-${index + 1}`}
-                    type="button"
-                    disabled={step !== index + 1}
-                    onClick={nextFunction}
-                  >
-                    {t("next")}
-                  </Button>
-                )}
-                {index === formSteps.length - 1 && (
-                  <Button
-                    data-testid="form-submit"
-                    type="submit"
-                    disabled={step !== index + 1}
-                  >
-                    {t("submit")}
-                  </Button>
-                )}
-                {index !== 0 && (
-                  <Button
-                    data-testid={`form-back-${index + 1}`}
-                    type="button"
-                    variant={"ghost"}
-                    onClick={() => setStep((prev) => prev - 1)}
-                    disabled={step !== index + 1}
-                  >
-                    {t("back")}
-                  </Button>
-                )}
-                {submitted && step === formSteps.length && (
-                  <ResetButton reset={reset} />
-                )}
-              </div>
-            }
-          />
-        ))}
+        {formSteps.map(({ Component, nextFunction }, index) => {
+          const isLast = index === formSteps.length - 1;
+          const currentStep = index + 1;
+          return (
+            <Component
+              step={step}
+              form={form}
+              submitted={submitted}
+              children={
+                <div className="flex gap-3 mt-3">
+                  {!isLast && (
+                    <Button
+                      data-testid={`form-next-${currentStep}`}
+                      type="button"
+                      disabled={step !== currentStep}
+                      onClick={nextFunction}
+                    >
+                      {t("next")}
+                    </Button>
+                  )}
+                  {isLast && (
+                    <Button
+                      data-testid="form-submit"
+                      type="submit"
+                      disabled={step !== currentStep}
+                    >
+                      {t("submit")}
+                    </Button>
+                  )}
+                  {index !== 0 && (
+                    <Button
+                      data-testid={`form-back-${currentStep}`}
+                      type="button"
+                      variant={"ghost"}
+                      onClick={() => setStep((prev) => prev - 1)}
+                      disabled={step !== currentStep}
+                    >
+                      {t("back")}
+                    </Button>
+                  )}
+                  {submitted && isLast && <ResetButton reset={reset} />}
+                </div>
+              }
+            />
+          );
+        })}
       </form>
     </Form>
   );
