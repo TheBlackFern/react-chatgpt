@@ -72,6 +72,7 @@ test.describe("App", () => {
     await page.getByTestId("form-next-1").click();
     await page.getByTestId("form-next-2").click();
     await page.getByTestId("form-context-textarea").fill("s");
+    await page.getByTestId("form-next-3").click();
     await expect(
       page.getByText("Context must be at least 10 characters long")
     ).toBeVisible();
