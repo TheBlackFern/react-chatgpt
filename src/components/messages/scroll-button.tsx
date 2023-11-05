@@ -18,6 +18,7 @@ const ScrollButton = ({ targetRef, className }: ScrollButtonProps) => {
   }
   return (
     <Button
+      data-testid="scroll-button"
       variant={"outline"}
       onClick={handleClick}
       className={cn(
