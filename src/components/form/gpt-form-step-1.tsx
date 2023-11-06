@@ -21,7 +21,10 @@ const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
         ease: "easeInOut",
       }}
     >
-      <h1 className="font-medium text-medium text-xl mb-3">
+      <h1
+        data-testid="form-step1-heading"
+        className="font-medium text-medium text-xl mb-3"
+      >
         {t("step1.heading")}
       </h1>
       <Form.FormField

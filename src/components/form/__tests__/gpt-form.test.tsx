@@ -1,50 +1,54 @@
-// import { beforeAll, describe, expect, test, vi } from "vitest";
-// import { getByTestId, render, screen } from "@testing-library/react";
-// import GPTForm from "../gpt-form";
-// import { TMessage, TModel } from "@/lib/types";
-// import { Dispatch, SetStateAction } from "react";
-// import renderWithi18next from "@/lib/renderWithI18Next";
+import { describe, expect, test, vi } from "vitest";
+import { act, screen, getByTestId, render } from "@testing-library/react";
+import renderWithi18next from "@/lib/renderWithI18Next";
+import GPTForm from "../gpt-form";
+import type { TPrompt } from "@/@types";
+import enForm from "@/locales/en/form.json";
+import ruForm from "@/locales/ru/form.json";
 
-// describe("Form", () => {
-//   beforeAll(() => {
-//     let messages: TMessagep[] = [];
-//     const setMessages = (newMsgs: TMessage[]) => {
-//       messages = newMsgs;
-//     };
-//     let query = {
-//       secret: "",
-//       model: "gpt-4" as TModel,
-//       prompt: "",
-//       temperature: 0.7,
-//     };
-//     const setQuery = (newQuery: typeof query) => {
-//       query = newQuery;
-//     };
+let messages: string[] = [];
+// let query = {
+//   secret: "",
+//   model: "gpt-4" as TModel,
+//   prompt: "",
+//   temperature: 0.7,
+// };
 
-//     const { container } = renderWithi18next(
-//       <GPTForm
-//         setMessages={setMessages as Dispatch<SetStateAction<TMessage[]>>}
-//         setQuery={
-//           setQuery as Dispatch<
-//             SetStateAction<{
-//               secret: string;
-//               model: "gpt-4" | "gpt-3.5-turbo";
-//               prompt: string;
-//               temperature: number;
-//             }>
-//           >
-//         }
-//       />
-//     );
-//   });
+const mockReset = vi.fn();
 
-//   test("should show the first step", () => {
-//     expect(screen.getByText(/Step|Шаг/i).toBeInTheDocument());
-//   });
+const mockAddMessage = vi.fn().mockImplementation((text: string) => {
+  messages.push(text);
+});
+const mockMakeQuery = vi.fn().mockImplementation((prompt: TPrompt) => {
+  console.log(JSON.stringify(prompt));
+});
 
-//   test("should not the second and third step", () => {
-//     expect(
-//       screen.getByText(/Step 1: Provide a Secret/i)
-//     ).not.toBeInTheDocument();
-//   });
-// });
+describe("Form", () => {
+  test("should show the first step", async () => {
+    await act(() =>
+      renderWithi18next(
+        <GPTForm
+          makeQuery={mockMakeQuery}
+          addMessage={mockAddMessage}
+          reset={mockReset}
+        />
+      )
+    );
+    expect(await screen.findByTestId("form-step1-heading")).toBeTruthy();
+    screen.debug();
+    // expect(screen.getByText(enForm.step1.heading)).toBeVisible();
+  });
+
+  test("should not the second and third step", async () => {
+    await act(() =>
+      renderWithi18next(
+        <GPTForm
+          makeQuery={mockMakeQuery}
+          addMessage={mockAddMessage}
+          reset={mockReset}
+        />
+      )
+    );
+    expect(screen.findByTestId("form-step2-heading")).not.toBeTruthy();
+  });
+});
