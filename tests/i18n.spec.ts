@@ -14,8 +14,7 @@ test.describe("i18n", () => {
 
   test("works for English", async ({ page }) => {
     await page.getByRole("menuitem", { name: "English" }).click();
-    await expect(
-      page.getByRole("heading", { name: "Step 1: Provide a Secret" })
-    ).toBeVisible;
+    expect(page.getByRole("heading", { name: "Step 1: Provide a Secret" }))
+      .toBeVisible;
   });
 });
