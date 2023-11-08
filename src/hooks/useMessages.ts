@@ -3,20 +3,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { fetchChatGPTResponse } from "@/lib/fetchChatGPTResponse";
-import type { GPTResponse, TMessage, TModel, TPrompt } from "@/@types";
+import type { GPTResponse, TMessage, TPrompt } from "@/@types";
+import { getMessagesFromStorage } from "@/lib/utils";
 
-const INITIAL_QUERY = {
-  secret: "",
-  model: "gpt-4" as TModel,
-  context: "I am a student using ChatGPT for research",
-  prompt: "",
-  temperature: 0.7,
-};
-
-export function useMessages() {
+export function useMessages(initialQuery: TPrompt) {
   const { t } = useTranslation(["messages"]);
-  const [messages, setMessages] = React.useState<TMessage[]>([]);
-  const [query, setQuery] = React.useState<TPrompt>(INITIAL_QUERY);
+  const initialMessages = getMessagesFromStorage();
+  const [messages, setMessages] = React.useState<TMessage[]>(initialMessages);
+  const [query, setQuery] = React.useState<TPrompt>(initialQuery);
   const { isFetching, error, data } = useQuery<GPTResponse, Error>({
     queryKey: ["test", query.prompt],
     queryFn: () =>
@@ -27,7 +21,7 @@ export function useMessages() {
         messages,
         query.context
       ),
-    enabled: messages.length > 0,
+    enabled: messages.length % 2 === 1,
     retry: false,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -41,13 +35,17 @@ export function useMessages() {
       data.choices[0].message &&
       data.choices[0].message.content.length > 0
     ) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: data.choices[0]?.message?.content,
-          role: "assistant",
-        },
-      ]);
+      setMessages((prev) => {
+        const newMessages = [
+          ...prev,
+          {
+            content: data.choices[0]?.message?.content,
+            role: "assistant" as const,
+          },
+        ];
+        localStorage.setItem("messages", JSON.stringify(newMessages));
+        return newMessages;
+      });
     }
   }, [data]);
 

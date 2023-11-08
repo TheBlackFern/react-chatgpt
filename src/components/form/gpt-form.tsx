@@ -11,34 +11,38 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type TPrompt, gptSchema } from "@/@types";
+import { getInitialQueryFromStorage } from "@/lib/utils";
 
 type GPTFormProps = {
   makeQuery(prompt: TPrompt): void;
   addMessage(messageText: string): void;
   reset(): void;
+  isSubmitted: boolean;
 };
 
-function GPTForm({ makeQuery, addMessage, reset }: GPTFormProps) {
+function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
   const { t } = useTranslation(["form"]);
-  const [step, setStep] = React.useState(1);
-  const [submitted, setSubmitted] = React.useState(false);
+  const [step, setStep] = React.useState(isSubmitted ? 4 : 1);
+  const [submitted, setSubmitted] = React.useState(isSubmitted);
 
+  const initialQuery = getInitialQueryFromStorage();
   const form = useForm<TPrompt>({
     resolver: zodResolver(gptSchema),
     defaultValues: {
-      secret: "",
-      model: "gpt-4",
-      temperature: 0.7,
-      prompt: "",
+      secret: initialQuery.secret,
+      model: initialQuery.model,
+      context: initialQuery.context,
+      temperature: initialQuery.temperature,
+      prompt: initialQuery.prompt,
     },
   });
 
   async function onFirstNext() {
     await form.trigger("secret");
     const secretState = form.getFieldState("secret");
-    const isSecretValid = secretState.isDirty && !secretState.invalid;
-    if (isSecretValid) {
+    if (!secretState.invalid) {
       setStep((prev) => prev + 1);
+      localStorage.setItem("secret", form.getValues("secret"));
     }
   }
 
@@ -47,6 +51,7 @@ function GPTForm({ makeQuery, addMessage, reset }: GPTFormProps) {
     const contextState = form.getFieldState("context");
     if (!contextState.invalid) {
       setStep((prev) => prev + 1);
+      localStorage.setItem("context", form.getValues("context") || "");
     }
   }
 
@@ -124,7 +129,13 @@ function GPTForm({ makeQuery, addMessage, reset }: GPTFormProps) {
                     </Button>
                   )}
                   {submitted && isLast && (
-                    <ResetButton className="ml-auto" reset={reset} />
+                    <ResetButton
+                      className="ml-auto"
+                      reset={() => {
+                        reset();
+                        setStep(4);
+                      }}
+                    />
                   )}
                 </div>
               }

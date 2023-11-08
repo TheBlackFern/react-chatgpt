@@ -6,10 +6,11 @@ const GPTMessages = React.lazy(
 import { m } from "framer-motion";
 import { useComponentHeight } from "@/hooks/useComponentHeight";
 import { useMessages } from "@/hooks/useMessages";
+import { getInitialQueryFromStorage } from "@/lib/utils";
 
 const GPTContainer = () => {
   const { messages, addMessage, resetMessages, isFetching, error, makeQuery } =
-    useMessages();
+    useMessages(getInitialQueryFromStorage());
 
   const formRef = React.useRef<HTMLDivElement | null>(null);
   const messagesRef = React.useRef<HTMLDivElement | null>(null);
@@ -41,7 +42,12 @@ const GPTContainer = () => {
           ease: "easeInOut",
         }}
       >
-        <GPTForm makeQuery={makeQuery} addMessage={addMessage} reset={reset} />
+        <GPTForm
+          makeQuery={makeQuery}
+          addMessage={addMessage}
+          reset={reset}
+          isSubmitted={messages.length > 0}
+        />
       </m.div>
     </div>
   );
