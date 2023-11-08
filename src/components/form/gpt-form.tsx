@@ -46,6 +46,11 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
     }
   }
 
+  async function onSecondNext() {
+    setStep((prev) => prev + 1);
+    localStorage.setItem("model", form.getValues("model"));
+  }
+
   async function onThirdNext() {
     await form.trigger("context");
     const contextState = form.getFieldState("context");
@@ -69,7 +74,7 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
     },
     {
       Component: GPTFormStep2,
-      nextFunction: () => setStep((prev) => prev + 1),
+      nextFunction: onSecondNext,
     },
     {
       Component: GPTFormStep3,
