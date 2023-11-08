@@ -138,6 +138,7 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
                       className="ml-auto"
                       reset={() => {
                         reset();
+                        localStorage.setItem("messages", JSON.stringify([]));
                         setStep(4);
                       }}
                     />
