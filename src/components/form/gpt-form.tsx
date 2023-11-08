@@ -28,37 +28,12 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
   const initialQuery = getInitialQueryFromStorage();
   const form = useForm<TPrompt>({
     resolver: zodResolver(gptSchema),
-    defaultValues: {
-      secret: initialQuery.secret,
-      model: initialQuery.model,
-      context: initialQuery.context,
-      temperature: initialQuery.temperature,
-      prompt: initialQuery.prompt,
-    },
+    defaultValues: initialQuery,
   });
 
-  async function onFirstNext() {
-    await form.trigger("secret");
-    const secretState = form.getFieldState("secret");
-    if (!secretState.invalid) {
-      setStep((prev) => prev + 1);
-      localStorage.setItem("secret", form.getValues("secret"));
-    }
-  }
-
-  async function onSecondNext() {
+  const incrementStep = React.useCallback(() => {
     setStep((prev) => prev + 1);
-    localStorage.setItem("model", form.getValues("model"));
-  }
-
-  async function onThirdNext() {
-    await form.trigger("context");
-    const contextState = form.getFieldState("context");
-    if (!contextState.invalid) {
-      setStep((prev) => prev + 1);
-      localStorage.setItem("context", form.getValues("context") || "");
-    }
-  }
+  }, []);
 
   function onSubmit(values: TPrompt) {
     setSubmitted(true);
@@ -67,24 +42,7 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
     form.resetField("prompt");
   }
 
-  const formSteps = [
-    {
-      Component: GPTFormStep1,
-      nextFunction: onFirstNext,
-    },
-    {
-      Component: GPTFormStep2,
-      nextFunction: onSecondNext,
-    },
-    {
-      Component: GPTFormStep3,
-      nextFunction: onThirdNext,
-    },
-    {
-      Component: GPTFormStep4,
-      nextFunction: () => {},
-    },
-  ];
+  const formSteps = [GPTFormStep1, GPTFormStep2, GPTFormStep3, GPTFormStep4];
 
   return (
     <Form {...form}>
@@ -92,7 +50,7 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative min-h-[400px] mt-1 overflow-x-hidden"
       >
-        {formSteps.map(({ Component, nextFunction }, index) => {
+        {formSteps.map((Component, index) => {
           const isLast = index === formSteps.length - 1;
           const currentStep = index + 1;
           return (
@@ -101,7 +59,8 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
               step={step}
               form={form}
               submitted={submitted}
-              children={
+              incrementStep={incrementStep}
+              renderButtons={(nextFunction) => (
                 <div className="flex gap-3 mt-3">
                   {!isLast && (
                     <Button
@@ -144,7 +103,7 @@ function GPTForm({ makeQuery, addMessage, reset, isSubmitted }: GPTFormProps) {
                     />
                   )}
                 </div>
-              }
+              )}
             />
           );
         })}

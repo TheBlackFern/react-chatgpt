@@ -6,8 +6,22 @@ import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 3;
 
-const GPTFormStep3 = ({ step, form, children }: GPTFormStepProps) => {
+const GPTFormStep3 = ({
+  step,
+  form,
+  renderButtons,
+  incrementStep,
+}: GPTFormStepProps) => {
   const { t } = useTranslation(["form"]);
+
+  async function onNext() {
+    await form.trigger("context");
+    const contextState = form.getFieldState("context");
+    if (!contextState.invalid) {
+      incrementStep();
+      localStorage.setItem("context", form.getValues("context") || "");
+    }
+  }
   return (
     <m.div
       className="flex absolute p-1 left-0 right-0 top-0 flex-col"
@@ -47,7 +61,7 @@ const GPTFormStep3 = ({ step, form, children }: GPTFormStepProps) => {
           </Form.FormItem>
         )}
       />
-      {children}
+      {renderButtons(onNext)}
     </m.div>
   );
 };

@@ -1,3 +1,4 @@
+import * as React from "react";
 import * as Form from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { m } from "framer-motion";
@@ -6,8 +7,22 @@ import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 1;
 
-const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
+const GPTFormStep1 = ({
+  step,
+  form,
+  renderButtons,
+  incrementStep,
+}: GPTFormStepProps) => {
   const { t } = useTranslation(["form"]);
+
+  async function onNext() {
+    await form.trigger("secret");
+    const secretState = form.getFieldState("secret");
+    if (!secretState.invalid) {
+      incrementStep();
+      localStorage.setItem("secret", form.getValues("secret"));
+    }
+  }
   return (
     <m.div
       className="p-1"
@@ -50,9 +65,9 @@ const GPTFormStep1 = ({ step, form, children }: GPTFormStepProps) => {
           </Form.FormItem>
         )}
       />
-      {children}
+      {renderButtons(onNext)}
     </m.div>
   );
 };
 
-export default GPTFormStep1;
+export default React.memo(GPTFormStep1);

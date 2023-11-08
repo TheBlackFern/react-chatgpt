@@ -54,5 +54,6 @@ export type TMessage = {
 export type GPTFormStepProps = {
   step: number;
   form: UseFormReturn<TPrompt>;
-  children: React.ReactNode;
+  renderButtons(nextFunction: () => void): React.ReactNode;
+  incrementStep(): void;
 };

@@ -6,8 +6,18 @@ import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 2;
 
-const GPTFormStep2 = ({ step, form, children }: GPTFormStepProps) => {
+const GPTFormStep2 = ({
+  step,
+  form,
+  renderButtons,
+  incrementStep,
+}: GPTFormStepProps) => {
   const { t } = useTranslation(["form"]);
+
+  async function onNext() {
+    incrementStep();
+    localStorage.setItem("model", form.getValues("model"));
+  }
   return (
     <m.div
       className="absolute p-1 top-0 left-0 right-0"
@@ -65,7 +75,7 @@ const GPTFormStep2 = ({ step, form, children }: GPTFormStepProps) => {
           </Form.FormItem>
         )}
       />
-      {children}
+      {renderButtons(onNext)}
     </m.div>
   );
 };

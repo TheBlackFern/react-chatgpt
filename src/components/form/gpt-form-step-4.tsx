@@ -11,7 +11,8 @@ const GPTFormStep4 = ({
   step,
   form,
   submitted,
-  children,
+  renderButtons,
+  incrementStep,
 }: GPTFormStepProps & { submitted: boolean }) => {
   const { t } = useTranslation(["form"]);
   const tempComment = (val: number) => {
@@ -20,6 +21,16 @@ const GPTFormStep4 = ({
     if (val < 0.8) return t("degree.creative");
     if (val <= 1.0) return t("degree.random");
   };
+
+  async function onNext() {
+    await form.trigger("prompt");
+    const promptState = form.getFieldState("prompt");
+    if (!promptState.invalid) {
+      if (CURRENT_STEP !== 4) {
+        incrementStep();
+      }
+    }
+  }
 
   return (
     <m.div
@@ -140,7 +151,7 @@ const GPTFormStep4 = ({
           </Form.FormItem>
         )}
       />
-      {children}
+      {renderButtons(onNext)}
     </m.div>
   );
 };
