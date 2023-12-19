@@ -366,6 +366,53 @@ test.describe("App form", () => {
     await expect(page.getByText("Model: " + "gpt-3.5-turbo")).toBeVisible();
   });
 
+  test("sends another changed model value", async ({ page }) => {
+    await page.route(
+      "https://api.openai.com/v1/chat/completions",
+      async (route) => {
+        const { model, messages } = await JSON.parse(
+          route.request().postData()!
+        );
+        const choices: GPTChoice[] = messages.map((message, index) => ({
+          message,
+          finish_reason: "bruh",
+          index,
+        }));
+        choices.unshift({
+          message: {
+            role: "assistant",
+            content: "Model: " + model,
+          },
+          finish_reason: "bruh",
+          index: choices.length,
+        });
+        const json: GPTResponse = {
+          id: "qqqq",
+          object: "fff",
+          created: 123,
+          model,
+          usage: {
+            prompt_tokens: 1,
+            completion_tokens: 1,
+            total_tokens: 1,
+          },
+          choices,
+        };
+        await new Promise((r) => setTimeout(r, 1000));
+        await route.fulfill({ json });
+      }
+    );
+    await page.getByTestId("form-back-4").click();
+    await page.getByTestId("form-back-3").click();
+    await page.getByTestId("form-model-select-button").click();
+    await page.getByTestId("form-model-select-button-gpt-3.5-16k").click();
+    await page.getByTestId("form-next-2").click();
+    await page.getByTestId("form-next-3").click();
+
+    await page.getByTestId("form-submit").click();
+    await expect(page.getByText("Model: " + "gpt-3.5-turbo-16k")).toBeVisible();
+  });
+
   test("shows the scroll down button when input out of view, scrolls down on click", async ({
     page,
   }) => {

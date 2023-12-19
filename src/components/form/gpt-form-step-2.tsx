@@ -64,7 +64,7 @@ const GPTFormStep2 = ({
                   GPT-3.5-Turbo
                 </Select.SelectItem>
                 <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-3.5"
+                  data-testid="form-model-select-button-gpt-3.5-16k"
                   value="gpt-3.5-turbo-16k"
                 >
                   GPT-3.5-Turbo (16K tokens)
@@ -76,7 +76,7 @@ const GPTFormStep2 = ({
                   GPT-4
                 </Select.SelectItem>
                 <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-4"
+                  data-testid="form-model-select-button-gpt-4-32k"
                   value="gpt-4-32k"
                 >
                   GPT-4 (32K tokens)
