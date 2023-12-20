@@ -7,6 +7,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 export function getMessagesFromStorage() {
   const msgs = localStorage.getItem("messages");
   return msgs ? JSON.parse(msgs) : [];
