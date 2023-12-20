@@ -5,7 +5,7 @@ const modelSchema = z.union([
   z.literal("gpt-3.5-turbo"),
   z.literal("gpt-4"),
   z.literal("gpt-3.5-turbo-16k"),
-  z.literal("gpt-4-32k"),
+  // z.literal("gpt-4-32k"),
 ]);
 
 const emptyStringToUndefined = z.literal("").transform(() => undefined);
