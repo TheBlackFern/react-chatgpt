@@ -7,6 +7,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export async function callWithRetry(
+  fn: (...args: unknown[]) => Promise<Response>,
+  depth = 10
+): Promise<Response> {
+  let retryCounter = 0;
+  let res;
+  while (retryCounter < depth) {
+    res = await fn();
+    if (res.ok) return res;
+    await sleep(2 ** retryCounter * 100);
+    retryCounter++;
+  }
+  return res!;
+}
+
 export function getErrorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
   return String(error);

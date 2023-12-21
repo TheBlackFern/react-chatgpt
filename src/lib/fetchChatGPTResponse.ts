@@ -1,12 +1,12 @@
 import { TMessage, TModel } from "../@types";
-import { getErrorMessage } from "./utils";
-import { backOff } from "exponential-backoff";
+import { callWithRetry } from "./utils";
+// import { backOff } from "exponential-backoff";
 
 export const DEFAULT_CONTEXT = "I am a student making research using chatgpt";
 
 function fetchResponse(
   apiRequestBody: {
-    model: "gpt-3.5-turbo" | "gpt-4" | "gpt-3.5-turbo-16k" | "gpt-4-32k";
+    model: TModel;
     messages: {
       role: string;
       content: string;
@@ -34,7 +34,7 @@ export async function fetchChatGPTResponse(
 ) {
   const contextMessage = [
     {
-      role: "system",
+      role: "system" as const,
       content: context || DEFAULT_CONTEXT,
     },
   ];
@@ -45,12 +45,16 @@ export async function fetchChatGPTResponse(
     temperature: temperature,
   };
 
-  try {
-    const response = await backOff(() => fetchResponse(apiRequestBody, secret));
-    if (response.ok) {
-      return response.json();
-    } else throw new Error(`${response.status}`);
-  } catch (error) {
-    throw new Error(`${getErrorMessage(error)}`);
-  }
+  const response = await callWithRetry(() =>
+    fetchResponse(apiRequestBody, secret)
+  );
+
+  if (response.ok) {
+    // console.log(`It's okay with ${response.status}`);
+    return response.json();
+  } else throw new Error(`${response.status}`);
+  // } catch (error) {
+  //   console.log(`It's not okay with ${getErrorMessage(error)}`);
+  //   throw new Error(`${getErrorMessage(error)}`);
+  // }
 }
