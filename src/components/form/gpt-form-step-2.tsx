@@ -75,12 +75,12 @@ const GPTFormStep2 = ({
                 >
                   GPT-4
                 </Select.SelectItem>
-                {/* <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-4-32k"
-                  value="gpt-4-32k"
+                <Select.SelectItem
+                  data-testid="form-model-select-button-gpt-4-turbo-preview"
+                  value="gpt-4-turbo-preview"
                 >
-                  GPT-4 (32K tokens)
-                </Select.SelectItem> */}
+                  GPT-4-Turbo (Preview)
+                </Select.SelectItem>
               </Select.SelectContent>
             </Select.Select>
             <Form.FormMessage />
