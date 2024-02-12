@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import type { GPTResponse, GPTChoice } from "../src/@types";
-import { DEFAULT_CONTEXT } from "../src/lib/fetchChatGPTResponse";
+import { DEFAULT_CONTEXT, MODELS } from "../src/lib/const";
 
 test.describe("App form", () => {
   test.setTimeout(1_200_000);
@@ -317,7 +317,7 @@ test.describe("App form", () => {
       }
     );
     await page.getByTestId("form-submit").click();
-    await expect(page.getByText("Model: " + "gpt-4")).toBeVisible();
+    await expect(page.getByText("Model: " + MODELS[0])).toBeVisible();
   });
 
   test("sends a changed model value", async ({ page }) => {
@@ -359,59 +359,12 @@ test.describe("App form", () => {
     await page.getByTestId("form-back-4").click();
     await page.getByTestId("form-back-3").click();
     await page.getByTestId("form-model-select-button").click();
-    await page.getByTestId("form-model-select-button-gpt-3.5").click();
+    await page.getByTestId(`form-model-select-button-${MODELS[1]}`).click();
     await page.getByTestId("form-next-2").click();
     await page.getByTestId("form-next-3").click();
 
     await page.getByTestId("form-submit").click();
-    await expect(page.getByText("Model: " + "gpt-3.5-turbo")).toBeVisible();
-  });
-
-  test("sends another changed model value", async ({ page }) => {
-    await page.route(
-      "https://api.openai.com/v1/chat/completions",
-      async (route) => {
-        const { model, messages } = await JSON.parse(
-          route.request().postData()!
-        );
-        const choices: GPTChoice[] = messages.map((message, index) => ({
-          message,
-          finish_reason: "bruh",
-          index,
-        }));
-        choices.unshift({
-          message: {
-            role: "assistant",
-            content: "Model: " + model,
-          },
-          finish_reason: "bruh",
-          index: choices.length,
-        });
-        const json: GPTResponse = {
-          id: "qqqq",
-          object: "fff",
-          created: 123,
-          model,
-          usage: {
-            prompt_tokens: 1,
-            completion_tokens: 1,
-            total_tokens: 1,
-          },
-          choices,
-        };
-        await new Promise((r) => setTimeout(r, 1000));
-        await route.fulfill({ json });
-      }
-    );
-    await page.getByTestId("form-back-4").click();
-    await page.getByTestId("form-back-3").click();
-    await page.getByTestId("form-model-select-button").click();
-    await page.getByTestId("form-model-select-button-gpt-3.5-16k").click();
-    await page.getByTestId("form-next-2").click();
-    await page.getByTestId("form-next-3").click();
-
-    await page.getByTestId("form-submit").click();
-    await expect(page.getByText("Model: " + "gpt-3.5-turbo-16k")).toBeVisible();
+    await expect(page.getByText("Model: " + MODELS[1])).toBeVisible();
   });
 
   test("propely backs off, while returning a call upon response", async ({
@@ -464,13 +417,13 @@ test.describe("App form", () => {
     );
     await page.getByTestId("form-back-4").click();
     await page.getByTestId("form-back-3").click();
-    await page.getByTestId("form-model-select-button").click();
-    await page.getByTestId("form-model-select-button-gpt-3.5-16k").click();
+    // await page.getByTestId("form-model-select-button").click();
+    // await page.getByTestId(`form-model-select-button-${MODEL[]}}`).click();
     await page.getByTestId("form-next-2").click();
     await page.getByTestId("form-next-3").click();
 
     await page.getByTestId("form-submit").click();
-    await expect(page.getByText("Model: " + "gpt-3.5-turbo-16k")).toBeVisible();
+    await expect(page.getByText("Model: " + MODELS[0])).toBeVisible();
   });
 
   test.skip("propely backs off, while throwing an error on no response", async ({

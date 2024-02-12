@@ -2,6 +2,8 @@ import * as Form from "@/components/ui/form";
 import * as Select from "@/components/ui/select";
 import { m } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { getModelDisplayName } from "@/lib/utils";
+import { MODELS } from "@/lib/const";
 import type { GPTFormStepProps } from "@/@types";
 
 const CURRENT_STEP = 2;
@@ -57,30 +59,15 @@ const GPTFormStep2 = ({
                 </Select.SelectTrigger>
               </Form.FormControl>
               <Select.SelectContent>
-                <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-3.5"
-                  value="gpt-3.5-turbo"
-                >
-                  GPT-3.5-Turbo
-                </Select.SelectItem>
-                <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-3.5-16k"
-                  value="gpt-3.5-turbo-16k"
-                >
-                  GPT-3.5-Turbo (16K tokens)
-                </Select.SelectItem>
-                <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-4"
-                  value="gpt-4"
-                >
-                  GPT-4
-                </Select.SelectItem>
-                <Select.SelectItem
-                  data-testid="form-model-select-button-gpt-4-turbo-preview"
-                  value="gpt-4-turbo-preview"
-                >
-                  GPT-4-Turbo (Preview)
-                </Select.SelectItem>
+                {MODELS.map((model) => (
+                  <Select.SelectItem
+                    data-testid={`form-model-select-button-${model}`}
+                    value={model}
+                    key={model}
+                  >
+                    {getModelDisplayName(model)}
+                  </Select.SelectItem>
+                ))}
               </Select.SelectContent>
             </Select.Select>
             <Form.FormMessage />

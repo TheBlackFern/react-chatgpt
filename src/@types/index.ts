@@ -1,12 +1,9 @@
 import * as z from "zod";
 import type { UseFormReturn } from "react-hook-form";
+import { createUnionSchema } from "@/lib/zodFromUnion";
+import { MODELS } from "@/lib/const";
 
-const modelSchema = z.union([
-  z.literal("gpt-3.5-turbo"),
-  z.literal("gpt-4"),
-  z.literal("gpt-3.5-turbo-16k"),
-  z.literal("gpt-4-turbo-preview"),
-]);
+const modelSchema = createUnionSchema(MODELS);
 
 const emptyStringToUndefined = z.literal("").transform(() => undefined);
 
@@ -14,7 +11,7 @@ export const gptSchema = z.object({
   secret: z
     .string()
     .min(10, { message: "Key must be at least 10 characters long" }),
-  model: modelSchema.default("gpt-4"),
+  model: modelSchema.default(MODELS[0]),
   context: z
     .string()
     .min(10, { message: "Context must be at least 10 characters long" })

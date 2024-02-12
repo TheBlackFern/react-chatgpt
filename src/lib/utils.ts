@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { DEFAULT_CONTEXT } from "./fetchChatGPTResponse";
+import { DEFAULT_CONTEXT, MODELS } from "./const";
 import type { TModel } from "@/@types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -41,9 +41,18 @@ export function getInitialQueryFromStorage() {
 
   return {
     secret: savedSecret || "",
-    model: (savedModel || "gpt-4") as TModel,
+    model: (savedModel || MODELS[0]) as TModel,
     context: savedContext || DEFAULT_CONTEXT,
     prompt: "",
     temperature: 0.7,
   };
+}
+
+export function getModelDisplayName(model: string) {
+  return model
+    .split("-")
+    .map((word, i) =>
+      i === 0 ? "GPT" : word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join("-");
 }

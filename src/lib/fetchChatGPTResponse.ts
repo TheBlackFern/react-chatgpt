@@ -1,8 +1,6 @@
 import { TMessage, TModel } from "../@types";
+import { DEFAULT_CONTEXT } from "./const";
 import { callWithRetry } from "./utils";
-// import { backOff } from "exponential-backoff";
-
-export const DEFAULT_CONTEXT = "I am a student making research using chatgpt";
 
 function fetchResponse(
   apiRequestBody: {
