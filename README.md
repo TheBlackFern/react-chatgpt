@@ -5,7 +5,7 @@ An extremely overengineered form for interaction with ChatGPT's API.
 Functionality and realisation details:
 
 - With your secret key, call the ChatGPT API and chat freely
-- Choose between gpt-4 or gpt-3.5 turbo, setup the context, adjust the temperature
+- Choose between various models, setup the context, adjust the temperature
 - Copy responses with one click
 - Change the model, context and temperature on the fly, while messages persist
 - Includes smooth animations, dark mode and support for English and Russian languages
